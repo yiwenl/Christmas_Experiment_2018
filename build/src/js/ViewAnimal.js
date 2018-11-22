@@ -14,20 +14,13 @@ class ViewAnimal extends alfrid.View {
 
 	_init() {
 		this.mesh = Assets.get('deer');
-		this.mesh = Assets.get('whale');
-
-		this.texture = Assets.get('env');
-		this.textureNoise = Assets.get('noise');
+		// this.mesh = Assets.get('whale');
 	}
 
 
 	render() {
 		GL.disable(GL.CULL_FACE);
 		this.shader.bind();
-		this.shader.uniform("texture", "uniform1i", 0);
-		this.texture.bind(0);
-		this.shader.uniform("textureNoise", "uniform1i", 1);
-		this.textureNoise.bind(1);
 		GL.draw(this.mesh);
 		GL.enable(GL.CULL_FACE);
 	}
