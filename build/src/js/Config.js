@@ -2,6 +2,7 @@
 
 export default {
 	numTrees:50,
+	treeScale:1,
 	floorRadius:3,
 	maxFloorHeight:0.6,
 	treeBumpHeight:0.25,

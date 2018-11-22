@@ -9,6 +9,7 @@ attribute vec4 aPosOffset;
 uniform mat4 uModelMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uProjectionMatrix;
+uniform float uTreeScale;
 
 varying vec2 vTextureCoord;
 varying vec3 vNormal;
@@ -27,7 +28,7 @@ void main(void) {
 	pos.xz          = rotate(pos.xz, aPosOffset.w);
 	pos.y           *= 3.0;
 	pos.y           -= 2.0;
-	pos             *= scale;
+	pos             *= scale * uTreeScale;
 	pos.xz          += aPosOffset.xy;
 	
 	vScreenPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(pos, 1.0);

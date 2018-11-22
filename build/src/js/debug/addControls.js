@@ -6,6 +6,7 @@ import Config from '../Config';
 export default (scene) => {
 	setTimeout(()=> {
 		gui.add(Config, 'numTrees', 1, 100).onFinishChange(Settings.reload);
+		gui.add(Config, 'treeScale', 0, 5).onChange(Settings.refresh);
 		gui.add(Config, 'floorRadius', 1, 5).onFinishChange(Settings.reload);
 		gui.add(Config, 'maxFloorHeight', 0, 1).onFinishChange(Settings.refresh);
 		gui.add(Config, 'treeBumpHeight', 0, 1).onFinishChange(Settings.reload);

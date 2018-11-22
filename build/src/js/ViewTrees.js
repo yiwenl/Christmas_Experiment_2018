@@ -2,6 +2,7 @@
 
 import alfrid, { GL } from 'alfrid';
 import Assets from './Assets';
+import Config from './Config';
 import vs from 'shaders/trees.vert';
 import fs from 'shaders/depth.frag';
 
@@ -45,6 +46,7 @@ class ViewTrees extends alfrid.View {
 
 	render() {
 		this.shader.bind();
+		this.shader.uniform("uTreeScale", "float", Config.treeScale);
 		GL.draw(this.mesh);
 	}
 

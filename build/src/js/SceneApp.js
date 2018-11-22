@@ -161,7 +161,7 @@ class SceneApp extends Scene {
 		}
 
 		GL.viewport(0, 0, s, s);
-		this._bCopy.draw(this._textureFloor);
+		// this._bCopy.draw(this._textureFloor);
 		GL.enable(GL.DEPTH_TEST);
 	}
 
