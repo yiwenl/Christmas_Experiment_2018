@@ -8,6 +8,7 @@ uniform sampler2D texture;
 uniform float uHeight;
 uniform float uRange;
 uniform float uPower;
+uniform float uBumpHeight;
 uniform vec2 uPos;
 
 void main(void) {
@@ -15,5 +16,5 @@ void main(void) {
 	d = smoothstep(uRange, 0.0, d);
 	d = pow(d, uPower);
     gl_FragColor = texture2D(texture, vTextureCoord);
-    gl_FragColor.rgb += vec3(d * mix(uHeight, 1.0, 0.5) * 0.25);
+    gl_FragColor.rgb += vec3(d * mix(uHeight, 1.0, 0.5) * uBumpHeight);
 }

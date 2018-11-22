@@ -23,6 +23,7 @@ class ViewFloor extends alfrid.View {
 		this.shader.bind();
 		this.shader.uniform("texture", "uniform1i", 0);
 		texture.bind(0);
+		this.shader.uniform("uFloorHeight", "float", Config.maxFloorHeight);
 		GL.draw(this.mesh);
 	}
 

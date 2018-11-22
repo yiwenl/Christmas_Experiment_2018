@@ -5,6 +5,7 @@ import ViewObjModel from './ViewObjModel';
 import Assets from './Assets';
 import Settings from './Settings';
 import Config from './Config';
+import Noise3DTexture from './Noise3DTexture';
 
 import { generateTrees, generateHeightMap } from './utils';
 
@@ -13,6 +14,7 @@ import ViewTrees from './ViewTrees';
 import ViewPlanes from './ViewPlanes';
 import ViewBg from './ViewBg';
 import ViewGround from './ViewGround';
+import ViewFog from './ViewFog';
 
 import addControls from './debug/addControls';
 
@@ -67,6 +69,10 @@ class SceneApp extends Scene {
 			minFilter:GL.LINEAR,
 			magFilter:GL.LINEAR
 		});
+
+		this._noise3D = new Noise3DTexture(Config.noiseNum, Config.noiseScale);
+
+		this._noise3D.render();
 	}
 
 
@@ -83,6 +89,7 @@ class SceneApp extends Scene {
 		this._vPlanes = new ViewPlanes();
 		this._vBg     = new ViewBg();
 		this._vGround = new ViewGround();
+		this._vFog    = new ViewFog();
 
 		this._resetTreePosition();
 	}
@@ -166,13 +173,14 @@ class SceneApp extends Scene {
 		this._vGround.render();
 		this._vFloor.render(this._textureFloor);
 		this._vTrees.render();
+		this._vFog.render(this._noise3D.getTexture());
 
 	}
 
 
 	resize() {
 		const { innerWidth, innerHeight, devicePixelRatio } = window;
-		GL.setSize(innerWidth * devicePixelRatio, innerHeight * devicePixelRatio);
+		GL.setSize(innerWidth, innerHeight);
 		this.camera.setAspectRatio(GL.aspectRatio);
 
 		if(this.cameraFront) {

@@ -21,7 +21,7 @@ const generateHeightMap = (trees) => {
 		mesh       = alfrid.Geom.bigTriangle();
 	}
 	
-	
+	 
 	const floorSize = Config.floorRadius;
 
 	fbo.read.bind();
@@ -57,6 +57,7 @@ const generateHeightMap = (trees) => {
 		shader.uniform("uHeight", "float", Math.random());
 		shader.uniform("uRange", "float", random(0.05, 0.1));
 		shader.uniform("uPower", "float", random(2, 3));
+		shader.uniform("uBumpHeight", "float", Config.treeBumpHeight);
 		GL.draw(mesh);
 		fbo.write.unbind();
 
