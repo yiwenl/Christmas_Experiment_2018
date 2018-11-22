@@ -15,6 +15,8 @@ import ViewPlanes from './ViewPlanes';
 import ViewBg from './ViewBg';
 import ViewGround from './ViewGround';
 import ViewFog from './ViewFog';
+import ViewFXAA from './ViewFXAA';
+import ViewAnimal from './ViewAnimal';
 
 import addControls from './debug/addControls';
 
@@ -29,7 +31,7 @@ class SceneApp extends Scene {
 		// this.orbitalControl.radius.limit(5, 5);
 		this.orbitalControl.radius.limit(3, 6);
 		// this.orbitalControl.rx.limit(0, 0);
-		this.orbitalControl.rx.limit(0, .2);
+		this.orbitalControl.rx.limit(-.1, .2);
 
 		this.mtx = mat4.create();
 		mat4.translate(this.mtx, this.mtx, vec3.fromValues(0, -1, 0));
@@ -64,14 +66,14 @@ class SceneApp extends Scene {
 		window.GL = GL;
 		const fboSize = 2048;
 
-		// this._fboRender = new alfrid.FrameBuffer(fboSize, fboSize, {
-		this._fboRender = new alfrid.FrameBuffer(GL.width, GL.height, {
+		this._fboCapture = new alfrid.FrameBuffer(GL.width, GL.height, {
 			minFilter:GL.LINEAR,
 			magFilter:GL.LINEAR
 		});
 
-		this._noise3D = new Noise3DTexture(Config.noiseNum, Config.noiseScale);
+		this._fboRender = new alfrid.FrameBuffer(GL.width, GL.height);
 
+		this._noise3D = new Noise3DTexture(Config.noiseNum, Config.noiseScale);
 		this._noise3D.render();
 	}
 
@@ -80,16 +82,16 @@ class SceneApp extends Scene {
 		console.log('init views');
 
 		this._bCopy = new alfrid.BatchCopy();
-		this._bAxis = new alfrid.BatchAxis();
-		this._bDots = new alfrid.BatchDotsPlane();
 		this._bBall = new alfrid.BatchBall();
 
 		this._vFloor  = new ViewFloor();
 		this._vTrees  = new ViewTrees();
 		this._vPlanes = new ViewPlanes();
 		this._vBg     = new ViewBg();
+		this._vAnimal = new ViewAnimal();
 		this._vGround = new ViewGround();
 		this._vFog    = new ViewFog();
+		this._vFxaa   = new ViewFXAA();
 
 		this._resetTreePosition();
 	}
@@ -100,11 +102,11 @@ class SceneApp extends Scene {
 
 		// let g = 0.5;
 		//	take screen shot of current frame
-		this._fboRender.bind();
+		this._fboCapture.bind();
 		GL.clear(0, 0, 0, 1);
 		GL.setMatrices(this.camera);
 		this.renderScene();
-		this._fboRender.unbind();
+		this._fboCapture.unbind();
 
 		//	set flag to start rendering the planes
 		this._isInTransition = true;
@@ -145,24 +147,38 @@ class SceneApp extends Scene {
 
 	render() {
 		GL.clear(0, 0, 0, 1);
+
+		this._fboRender.bind();
+		GL.clear(0, 0, 0, 1);
 		this.renderScene();
 
 		if(this._isInTransition) {
-			this._vPlanes.render(this._mtxFront, this._fboRender.getTexture());
+			this._vPlanes.render(this._mtxFront, this._fboCapture.getTexture());
 		}
 
+		this._fboRender.unbind();
 
+		if(Config.fxaa) {
+			this._vFxaa.render(this._fboRender.getTexture());
+		} else {
+			this._bCopy.draw(this._fboRender.getTexture());	
+		}
+		
+
+		/*
 		GL.disable(GL.DEPTH_TEST);
 		let s = 100;
 
 		if(this._isInTransition) {
 			GL.viewport(s, 0, s, s/GL.aspectRatio);
-			this._bCopy.draw(this._fboRender.getTexture());
+			this._bCopy.draw(this._fboCapture.getTexture());
 		}
 
 		GL.viewport(0, 0, s, s);
 		// this._bCopy.draw(this._textureFloor);
 		GL.enable(GL.DEPTH_TEST);
+
+		*/
 	}
 
 
@@ -173,6 +189,9 @@ class SceneApp extends Scene {
 		this._vGround.render();
 		this._vFloor.render(this._textureFloor);
 		this._vTrees.render();
+		this._vAnimal.render();
+		// let s = .2;
+		// this._bBall.draw([0, 0, 0], [s, s, s], [1, 1, 0]);
 		this._vFog.render(this._noise3D.getTexture());
 
 	}
