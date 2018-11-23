@@ -1,7 +1,9 @@
 precision highp float;
 varying vec2 vTextureCoord;
 varying vec3 vPosition;
-uniform sampler2D texture;
+uniform sampler2D texture0;
+uniform sampler2D texture1;
+uniform float uPercent;
 uniform float uNum;
 uniform float uNumSlices;
 uniform float uOffset;
@@ -13,7 +15,7 @@ vec2 getUVOffset(float index) {
 	return vec2(x, y) / uNum;
 }
 
-vec3 texture3D(vec3 pos) {
+vec3 texture3D(vec3 pos, sampler2D texture) {
 	vec3 posAdj = (pos * .25 + .5);
 	
 	float tz    = posAdj.z;
@@ -35,10 +37,13 @@ vec3 texture3D(vec3 pos) {
 
 
 void main(void) {
-	vec3 color = texture3D(vPosition);
+	vec3 color0 = texture3D(vPosition, texture0);
+	vec3 color1 = texture3D(vPosition, texture1);
 
-	float a = smoothstep(-0.5, 0.25, vPosition.y);
-    gl_FragColor = vec4( pow(color.r, 1.0 + uOffset) * 2.0 * a);
-    gl_FragColor = vec4( vec3(pow(color.r, 1.0 + uOffset) * 2.0 * a), 1.0 );
+	vec3 color = mix(color0, color1, uPercent);
+
+	float a = smoothstep(-0.5, -0.2, vPosition.y);
+    // gl_FragColor = vec4( pow(color.r, 1.0 + uOffset) * 2.0);
+    gl_FragColor = vec4( vec3(pow(color.r, 1.0 + uOffset) * 2.0), 1.0 );
     // gl_FragColor = vec4( a);
 }

@@ -4,10 +4,12 @@ import alfrid, { GL, GLShader, Geom } from 'alfrid';
 import fs from '../shaders/noise.frag';
 
 class Noise3DTexture {
-	constructor(mNum = 8.0, mNoiseScale = 1.0) {
+	constructor(mNum = 8.0, mNoiseScale = 1.0, mSeed = Math.random() * 0xFF) {
 		this._num = mNum;
 		this.noiseScale = mNoiseScale;
-		this._seed = Math.random() * 0xFF;
+		this._seed = mSeed;
+
+		console.log('seed', this._seed);
 
 		this._init();
 	}
@@ -31,7 +33,7 @@ class Noise3DTexture {
 	}
 
 
-	render() {
+	render(mSeed) {
 		this._seed += 0.003;
 		this._fboNoise.bind();
 		GL.clear(0, 0, 0, 0);
@@ -45,7 +47,7 @@ class Noise3DTexture {
 				this.shader.bind();
 				this.shader.uniform("uNoiseScale", "float", this.noiseScale);
 				this.shader.uniform("uZ", "float", index);
-				this.shader.uniform("uSeed", "float", this._seed);
+				this.shader.uniform("uSeed", "float", mSeed || this._seed);
 				GL.draw(this.mesh);
 			}
 		}

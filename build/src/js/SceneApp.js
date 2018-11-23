@@ -5,6 +5,7 @@ import Assets from './Assets';
 import Settings from './Settings';
 import Config from './Config';
 import Noise3DTexture from './Noise3DTexture';
+import Noise3D from './Noise3D';
 
 import { generateTrees, generateHeightMap } from './utils';
 
@@ -21,6 +22,7 @@ import PassBloom from './PassBloom';
 import addControls from './debug/addControls';
 
 const fboScale = 1.5;
+const interval = 15;
 
 class SceneApp extends Scene {
 	constructor() {
@@ -48,6 +50,7 @@ class SceneApp extends Scene {
 
 		this._isInTransition = false;
 		this._resizeTimeout = 0;
+		this._count = 0;
 
 		window.addEventListener('keydown', (e)=> {
 			if(e.keyCode === 32) {
@@ -70,6 +73,8 @@ class SceneApp extends Scene {
 
 		this._noise3D = new Noise3DTexture(Config.noiseNum, Config.noiseScale);
 		this._noise3D.render();
+
+		this._noises = new Noise3D();
 	}
 
 
@@ -150,8 +155,17 @@ class SceneApp extends Scene {
 		this.orbitalControl.ry.setTo(0);
 	}
 
+	updateFog() {
+		this._count = 0;
+		this._noises.update();
+	}
+
 
 	render() {
+		this._count ++;
+		if(this._count >= interval) {
+			this.updateFog();
+		}
 		GL.clear(0, 0, 0, 1);
 
 		this._fboRender.bind();
@@ -173,20 +187,19 @@ class SceneApp extends Scene {
 		}
 		
 
-		/*
-		GL.disable(GL.DEPTH_TEST);
-		let s = 100;
+		// GL.disable(GL.DEPTH_TEST);
+		// let s = 200;
 
-		if(this._isInTransition) {
-			GL.viewport(s, 0, s, s/GL.aspectRatio);
-			this._bCopy.draw(this._fboCapture.getTexture());
-		}
+		// if(this._isInTransition) {
+		// 	GL.viewport(s, 0, s, s/GL.aspectRatio);
+		// 	this._bCopy.draw(this._fboCapture.getTexture());
+		// }
 
-		GL.viewport(0, 0, s, s);
-		// this._bCopy.draw(this._textureFloor);
-		GL.enable(GL.DEPTH_TEST);
-
-		*/
+		// GL.viewport(0, 0, s, s);
+		// this._bCopy.draw(this._noises.texture0);
+		// GL.viewport(s, 0, s, s);
+		// this._bCopy.draw(this._noises.texture1);
+		// GL.enable(GL.DEPTH_TEST);
 	}
 
 
@@ -200,7 +213,8 @@ class SceneApp extends Scene {
 		this._vAnimal.render();
 		// let s = .2;
 		// this._bBall.draw([0, 0, 0], [s, s, s], [1, 1, 0]);
-		this._vFog.render(this._noise3D.getTexture());
+		// this._vFog.render(this._noise3D.getTexture());
+		this._vFog.render(this._noises.texture0, this._noises.texture1, this._count / interval);
 
 	}
 
