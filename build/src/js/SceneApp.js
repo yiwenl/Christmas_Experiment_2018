@@ -1,7 +1,6 @@
 // SceneApp.js
 
 import alfrid, { Scene, GL } from 'alfrid';
-import ViewObjModel from './ViewObjModel';
 import Assets from './Assets';
 import Settings from './Settings';
 import Config from './Config';
@@ -17,6 +16,7 @@ import ViewGround from './ViewGround';
 import ViewFog from './ViewFog';
 import ViewFXAA from './ViewFXAA';
 import ViewAnimal from './ViewAnimal';
+import PassBloom from './PassBloom';
 
 import addControls from './debug/addControls';
 
@@ -93,12 +93,20 @@ class SceneApp extends Scene {
 		this._vFog    = new ViewFog();
 		this._vFxaa   = new ViewFXAA();
 
+		this._passBloom = new PassBloom(3);
+
 		this._resetTreePosition();
 	}
 
 
 	next() {
 		console.log('next');
+		const animals = ['deer', 'whale'];
+		let index = animals.indexOf(Config.animal);
+		index++;
+		if(index >= animals.length) {
+			index = 0;
+		}
 
 		// let g = 0.5;
 		//	take screen shot of current frame
@@ -122,7 +130,10 @@ class SceneApp extends Scene {
 		this._vPlanes.reset();
 		this._vPlanes.open();
 
-		// this._vTrees.reset();
+		Config.animal = animals[index];
+		Settings.refresh();
+		this._vAnimal.setAnimal(animals[index]);
+
 		this._resetTreePosition();
 
 		//	when camera in position ( planes not visible )
@@ -158,8 +169,10 @@ class SceneApp extends Scene {
 
 		this._fboRender.unbind();
 
+		this._passBloom.render(this._fboRender.getTexture());
+
 		if(Config.fxaa) {
-			this._vFxaa.render(this._fboRender.getTexture());
+			this._vFxaa.render(this._fboRender.getTexture(), this._passBloom.getTexture());
 		} else {
 			this._bCopy.draw(this._fboRender.getTexture());	
 		}

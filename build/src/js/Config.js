@@ -11,5 +11,7 @@ export default {
 	noiseScale:3,
 	animated:false,
 	fxaa:true,
-	overlayOpacity:.25
+	overlayOpacity:.25,
+	bloomStrength:.25,
+	animal:'deer'
 };

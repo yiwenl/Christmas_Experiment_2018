@@ -1,6 +1,7 @@
 // ViewAnimal.js
 
 import alfrid, { GL } from 'alfrid';
+import Config from './Config';
 import Assets from './Assets';
 import vs from 'shaders/animal.vert';
 import fs from 'shaders/animal.frag';
@@ -13,8 +14,12 @@ class ViewAnimal extends alfrid.View {
 
 
 	_init() {
-		this.mesh = Assets.get('deer');
-		// this.mesh = Assets.get('whale');
+		this.mesh = Assets.get(Config.animal);
+	}
+
+
+	setAnimal(mId) {
+		this.mesh = Assets.get(mId);
 	}
 
 

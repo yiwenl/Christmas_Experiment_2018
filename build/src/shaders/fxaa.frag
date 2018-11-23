@@ -6,7 +6,9 @@ precision highp float;
 varying vec2 vTextureCoord;
 uniform sampler2D texture;
 uniform sampler2D textureNoise;
+uniform sampler2D textureBloom;
 uniform vec2 uResolution;
+uniform float uBloomStrength;
 uniform float uOverlay;
 
 
@@ -70,7 +72,13 @@ vec3 blendOverlay(vec3 base, vec3 blend, float opacity) {
 }
 
 void main(void) {
+    float t = abs(vTextureCoord.x - .5);
+    t = smoothstep(0.3, 0.0, t);
+
 	vec4 color = applyFXAA(texture);
+    vec3 bloom = texture2D(textureBloom, vTextureCoord).rgb;
+    color.rgb += bloom.rgb * uBloomStrength * t;
+
 	vec2 uv = vTextureCoord * 5.0;
 	vec3 noise = texture2D(textureNoise, uv).rgb;
 	color.rgb = blendOverlay(color.rgb, noise, uOverlay);

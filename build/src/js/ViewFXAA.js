@@ -21,14 +21,17 @@ class ViewFXAA extends alfrid.View {
 	}
 
 
-	render(texture) {
+	render(texture, textureBloom) {
 		this.shader.bind();
 		this.shader.uniform("texture", "uniform1i", 0);
 		texture.bind(0);
 		this.shader.uniform("textureNoise", "uniform1i", 1);
 		this.textureNoise.bind(1);
+		this.shader.uniform("textureBloom", "uniform1i", 2);
+		textureBloom.bind(2);
 		this.shader.uniform("uResolution", "vec2", [1/GL.width, 1/GL.height]);
 		this.shader.uniform("uOverlay", "float", Config.overlayOpacity);
+		this.shader.uniform("uBloomStrength", "float", Config.bloomStrength);
 		GL.draw(this.mesh);
 	}
 
