@@ -1,5 +1,6 @@
 
 const assetsToLoad = [
+	{"id":"gradientMap","url":"assets/img/gradientMap.jpg","type":"jpg"},
 	{"id":"noise","url":"assets/img/noise.jpg","type":"jpg"},
 	{"id":"deer","url":"assets/obj/deer.obj","type":"text"},
 	{"id":"tree1","url":"assets/obj/tree1.obj","type":"text"},

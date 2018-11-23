@@ -2,6 +2,7 @@
 
 import Settings from '../Settings';
 import Config from '../Config';
+import { saveJson } from '../utils';
 
 export default (scene) => {
 	setTimeout(()=> {
@@ -16,5 +17,14 @@ export default (scene) => {
 		gui.add(Config, 'bloomStrength', 0, 1).onChange(Settings.refresh);
 		gui.add(Config, 'fxaa').name('Post Effect').onChange(Settings.refresh);
 		gui.add(scene, 'resetCamera');
+
+
+		const o = {
+			saveSettings:() => {
+				saveJson(Config, 'xmas-settings');
+			}
+		}
+
+		gui.add(o, 'saveSettings').name('Save Settings');
 	}, 500);
 }

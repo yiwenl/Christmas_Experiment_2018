@@ -27,7 +27,7 @@ void main(void) {
 	float scale     = mix(aPosOffset.z, 1.0, .25);
 	pos.xz          = rotate(pos.xz, aPosOffset.w);
 	pos.y           *= 3.0;
-	pos.y           -= 2.0;
+	pos.y           -= 3.0;
 	pos             *= scale * uTreeScale;
 	pos.xz          += aPosOffset.xy;
 	

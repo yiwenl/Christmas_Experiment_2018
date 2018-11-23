@@ -20,6 +20,8 @@ import PassBloom from './PassBloom';
 
 import addControls from './debug/addControls';
 
+const fboScale = 1.5;
+
 class SceneApp extends Scene {
 	constructor() {
 		Settings.init();
@@ -28,9 +30,7 @@ class SceneApp extends Scene {
 		this.resize();
 		GL.enableAlphaBlending();
 		this.orbitalControl.radius.value = 5;
-		// this.orbitalControl.radius.limit(5, 5);
 		this.orbitalControl.radius.limit(3, 6);
-		// this.orbitalControl.rx.limit(0, 0);
 		this.orbitalControl.rx.limit(-.1, .2);
 
 		this.mtx = mat4.create();
@@ -47,13 +47,11 @@ class SceneApp extends Scene {
 		mat4.mul(this._mtxFront, this.cameraFront.projection, this.cameraFront.matrix);
 
 		this._isInTransition = false;
+		this._resizeTimeout = 0;
 
 		window.addEventListener('keydown', (e)=> {
-			// console.log(e.keyCode);
-
 			if(e.keyCode === 32) {
 				this.next();
-				// this.resetCamera();
 			}
 		});
 
@@ -61,17 +59,14 @@ class SceneApp extends Scene {
 	}
 
 	_initTextures() {
-		console.log('init textures', GL.width);
-
-		window.GL = GL;
-		const fboSize = 2048;
+		
 
 		this._fboCapture = new alfrid.FrameBuffer(GL.width, GL.height, {
 			minFilter:GL.LINEAR,
 			magFilter:GL.LINEAR
 		});
 
-		this._fboRender = new alfrid.FrameBuffer(GL.width, GL.height);
+		this._fboRender = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 
 		this._noise3D = new Noise3DTexture(Config.noiseNum, Config.noiseScale);
 		this._noise3D.render();
@@ -220,6 +215,20 @@ class SceneApp extends Scene {
 			mat4.identity(this._mtxFront, this._mtxFront);
 			mat4.mul(this._mtxFront, this.cameraFront.projection, this.cameraFront.matrix);
 		}
+
+		if(this._resizeTimeout !== 0) {
+			clearTimeout(this._resizeTimeout);
+		}
+
+		this._resizeTimeout = setTimeout(()=> {
+			this._fboCapture = new alfrid.FrameBuffer(GL.width, GL.height, {
+				minFilter:GL.LINEAR,
+				magFilter:GL.LINEAR
+			});
+
+			this._fboRender = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
+		}, 1000/60 * 5)
+		
 	}
 }
 
