@@ -35,9 +35,8 @@ const margins = {
 const generateTrees = () => {
 	const mesh = Assets.get(Config.animal);
 	const box = getBoundingBox(mesh, Config.animal);
-	console.log(box);
 	const positions = [];
-	const r = Config.floorRadius ;
+	const r = Config.floorRadius * 1.1;
 	let i = Config.numTrees;
 
 	const margin = margins[Config.animal] || 0.1;

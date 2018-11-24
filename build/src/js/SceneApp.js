@@ -10,18 +10,21 @@ import { generateTrees, generateHeightMap } from './utils';
 
 import ViewFloor from './ViewFloor';
 import ViewTrees from './ViewTrees';
-import ViewPlanes from './ViewPlanes';
 import ViewBg from './ViewBg';
 import ViewGround from './ViewGround';
 import ViewFog from './ViewFog';
 import ViewFXAA from './ViewFXAA';
 import ViewAnimal from './ViewAnimal';
+import ViewSquares from './ViewSquares';
+import ViewCover from './ViewCover';
 import PassBloom from './PassBloom';
 
 import addControls from './debug/addControls';
 
-const fboScale = 1.5;
+const fboScale = 1;
 const interval = 25;
+
+var random = function(min, max) { return min + Math.random() * (max - min);	}
 
 class SceneApp extends Scene {
 	constructor() {
@@ -33,13 +36,16 @@ class SceneApp extends Scene {
 		this.orbitalControl.radius.value = 5;
 		this.orbitalControl.radius.limit(3, 5.5);
 		this.orbitalControl.rx.limit(-.1, .2);
+		const easing = 0.05;
+		this.orbitalControl.rx.easing = easing;
+		this.orbitalControl.ry.easing = easing;
 
 		this.mtx = mat4.create();
-		mat4.translate(this.mtx, this.mtx, vec3.fromValues(0, -1, 0));
+		mat4.translate(this.mtx, this.mtx, vec3.fromValues(0, -1.1, 0));
 
 		//	setup front camera for projection
 		this.cameraFront = new alfrid.CameraPerspective();
-		const fov = 45 * Math.PI / 180;
+		const fov = 60 * Math.PI / 180;
 		const far = 15;
 		this.camera.setPerspective(fov, GL.aspectRatio, 1, far);
 		this.cameraFront.setPerspective(fov, GL.aspectRatio, 1, far);
@@ -49,6 +55,7 @@ class SceneApp extends Scene {
 		mat4.mul(this._mtxFront, this.cameraFront.projection, this.cameraFront.matrix);
 
 		this._isInTransition = false;
+		this._hasOpened = false;
 		this._resizeTimeout = 0;
 		this._count = 0;
 
@@ -70,6 +77,7 @@ class SceneApp extends Scene {
 		});
 
 		this._fboRender = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
+		this._fboTemp = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 
 		this._noises = new Noise3D(Config.noiseNum, Config.noiseScale);
 	}
@@ -83,12 +91,13 @@ class SceneApp extends Scene {
 
 		this._vFloor  = new ViewFloor();
 		this._vTrees  = new ViewTrees();
-		this._vPlanes = new ViewPlanes();
 		this._vBg     = new ViewBg();
 		this._vAnimal = new ViewAnimal();
 		this._vGround = new ViewGround();
 		this._vFog    = new ViewFog();
 		this._vFxaa   = new ViewFXAA();
+		this._vSquares = new ViewSquares();
+		this._vCover = new ViewCover();
 
 		this._passBloom = new PassBloom(3);
 
@@ -97,7 +106,10 @@ class SceneApp extends Scene {
 
 
 	next() {
-		console.log('next');
+		// this.orbitalControl.lock(true);
+
+		console.log('easing', this.orbitalControl.rx.easing);
+		
 		const animals = ['deer', 'whale', 'bear'];
 		let index = animals.indexOf(Config.animal);
 		index++;
@@ -114,30 +126,66 @@ class SceneApp extends Scene {
 		this._fboCapture.unbind();
 
 		//	set flag to start rendering the planes
+		this._hasOpened = false;
 		this._isInTransition = true;
 
 		//	set camera position to front
 		this.orbitalControl.rx.setTo(0);
 		this.orbitalControl.ry.setTo(0);
 		this.orbitalControl.radius.setTo(5);
-
+		this.orbitalControl._loop();
 		//	move camera to side to hide the planes
 
 		//	reset planes position
-		this._vPlanes.reset();
-		this._vPlanes.open();
+		this._vSquares.reset();
+		this._vSquares.open();
 
 		Config.animal = animals[index];
 		Settings.refresh();
 		this._vAnimal.setAnimal(animals[index]);
 
 		this._resetTreePosition();
+		this._capture();
+
+		setTimeout(() => {
+			this._vCover.open();
+		}, 1000);
+
+		setTimeout(() => {
+			const easing = 0.02;
+			this.orbitalControl.rx.easing = easing;
+			this.orbitalControl.ry.easing = easing;
+
+			this.orbitalControl.rx.value = -0.1;
+			this.orbitalControl.ry.value = random(-0.3, 0.3);
+			
+			this._vSquares.close();
+			this._vCover.close();
+			this._hasOpened = true;
+		}, 3000);
+
+
+		setTimeout(() => {
+			this._isInTransition = false;
+
+			const easing = 0.05;
+			this.orbitalControl.rx.easing = easing;
+			this.orbitalControl.ry.easing = easing;
+			// this.orbitalControl.lock(false);
+		}, 6000);
 
 		//	when camera in position ( planes not visible )
 		//	disable rendering the planes
-		
 	}
 
+
+	_capture() {
+		this._fboTemp.bind();
+		GL.clear(0, 0, 0, 1);
+		GL.setMatrices(this.camera);
+		this.renderScene();
+		this._fboTemp.unbind();
+	}
 
 	_resetTreePosition() {
 		this._trees = generateTrees();
@@ -165,12 +213,30 @@ class SceneApp extends Scene {
 		}
 		GL.clear(0, 0, 0, 1);
 
+		if(this._isInTransition && this._hasOpened) {
+			this._capture();
+		}
+
+
 		this._fboRender.bind();
 		GL.clear(0, 0, 0, 1);
-		this.renderScene();
 
+	
 		if(this._isInTransition) {
-			this._vPlanes.render(this._mtxFront, this._fboCapture.getTexture());
+			GL.disable(GL.DEPTH_TEST);
+			if(this._hasOpened) {
+				this._bCopy.draw(this._fboTemp.getTexture());
+			} else {
+				this._bCopy.draw(this._fboCapture.getTexture());	
+			}
+			
+			this._vCover.render();
+
+			GL.enable(GL.DEPTH_TEST);
+			GL.rotate(this.mtx);
+			this._vSquares.render(this._mtxFront, this._fboCapture.getTexture());
+		} else {
+			this.renderScene();	
 		}
 
 		this._fboRender.unbind();
@@ -183,38 +249,21 @@ class SceneApp extends Scene {
 			this._bCopy.draw(this._fboRender.getTexture());	
 		}
 		
-
-		
-
-		// if(this._isInTransition) {
-		// 	GL.viewport(s, 0, s, s/GL.aspectRatio);
-		// 	this._bCopy.draw(this._fboCapture.getTexture());
-		// }
-
-
-		GL.disable(GL.DEPTH_TEST);
-		let s = 200;
-		GL.viewport(0, 0, s, s);
-		this._bCopy.draw(this._noises.texture0);
-		GL.viewport(s, 0, s, s);
-		this._bCopy.draw(this._noises.texture1);
-		GL.enable(GL.DEPTH_TEST);
 	}
 
 
-	renderScene() {
+	renderScene(mRenderFog=true) {
 		GL.rotate(this.mtx);
 
 		this._vBg.render();
 		this._vGround.render();
 		this._vFloor.render(this._textureFloor);
-		this._vTrees.render();
+		this._vTrees.render(this.camera.position);
 		this._vAnimal.render();
-		// let s = .2;
-		// this._bBall.draw([0, 0, 0], [s, s, s], [1, 1, 0]);
-		// this._vFog.render(this._noise3D.getTexture());
-		this._vFog.render(this._noises.texture0, this._noises.texture1, this._count / interval);
-
+		if(mRenderFog) {
+			this._vFog.render(this._noises.texture0, this._noises.texture1, this._count / interval);	
+		}
+		
 	}
 
 
@@ -240,6 +289,7 @@ class SceneApp extends Scene {
 			});
 
 			this._fboRender = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
+			this._fboTemp = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 		}, 1000/60 * 5)
 		
 	}

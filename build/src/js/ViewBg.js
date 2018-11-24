@@ -14,7 +14,7 @@ class ViewBg extends alfrid.View {
 
 	_init() {
 		// const radius = Config.floorRadius * Math.sqrt(2);
-		const radius = Config.floorRadius * 2;
+		const radius = Config.floorRadius * 2.5;
 		this.mesh = alfrid.Geom.sphere(radius, 12, true);
 	}
 
