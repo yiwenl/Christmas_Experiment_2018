@@ -6,12 +6,13 @@ export default {
 	floorRadius:3.5,
 	maxFloorHeight:0.6,
 	treeBumpHeight:0.25,
-	numSlides:30,
+	numSlides:50,
 	noiseNum:8,
-	noiseScale:3,
+	noiseScale:5.5,
 	animated:false,
 	fxaa:true,
 	overlayOpacity:.25,
 	bloomStrength:.25,
-	animal:'deer'
+	animal:'deer',
+	fogMovingSpeed:1
 };

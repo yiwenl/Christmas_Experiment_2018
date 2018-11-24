@@ -1,6 +1,7 @@
 // Noise3D.js
 
 import Noise3DTexture from './Noise3DTexture';
+import Config from './Config';
 
 class Noise3D {
 	constructor(mNum = 8.0, mNoiseScale = 1.0) {
@@ -11,7 +12,7 @@ class Noise3D {
 		const b = new Noise3DTexture(mNum, mNoiseScale);
 
 		a.render(this._seed);
-		this._seed += this.speed;
+		this._seed += this.speed * Config.fogMovingSpeed;
 		b.render(this._seed);
 		this._noises = [a, b];
 	}
@@ -19,7 +20,7 @@ class Noise3D {
 
 	update() {
 		this.swap();
-		this._seed += this.speed;
+		this._seed += this.speed * Config.fogMovingSpeed;
 		this.noise1.render(this._seed);
 	}
 

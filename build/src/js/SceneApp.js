@@ -31,7 +31,7 @@ class SceneApp extends Scene {
 		this.resize();
 		GL.enableAlphaBlending();
 		this.orbitalControl.radius.value = 5;
-		this.orbitalControl.radius.limit(3, 6);
+		this.orbitalControl.radius.limit(3, 5.5);
 		this.orbitalControl.rx.limit(-.1, .2);
 
 		this.mtx = mat4.create();
@@ -40,8 +40,9 @@ class SceneApp extends Scene {
 		//	setup front camera for projection
 		this.cameraFront = new alfrid.CameraPerspective();
 		const fov = 45 * Math.PI / 180;
-		this.camera.setPerspective(fov, GL.aspectRatio, 1, 15);
-		this.cameraFront.setPerspective(fov, GL.aspectRatio, 1, 15);
+		const far = 15;
+		this.camera.setPerspective(fov, GL.aspectRatio, 1, far);
+		this.cameraFront.setPerspective(fov, GL.aspectRatio, 1, far);
 		this.cameraFront.lookAt([0, 0, 5], [0, 0, 0]);
 
 		this._mtxFront = mat4.create();
@@ -70,7 +71,7 @@ class SceneApp extends Scene {
 
 		this._fboRender = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 
-		this._noises = new Noise3D();
+		this._noises = new Noise3D(Config.noiseNum, Config.noiseScale);
 	}
 
 
@@ -183,19 +184,21 @@ class SceneApp extends Scene {
 		}
 		
 
-		// GL.disable(GL.DEPTH_TEST);
-		// let s = 200;
+		
 
 		// if(this._isInTransition) {
 		// 	GL.viewport(s, 0, s, s/GL.aspectRatio);
 		// 	this._bCopy.draw(this._fboCapture.getTexture());
 		// }
 
-		// GL.viewport(0, 0, s, s);
-		// this._bCopy.draw(this._noises.texture0);
-		// GL.viewport(s, 0, s, s);
-		// this._bCopy.draw(this._noises.texture1);
-		// GL.enable(GL.DEPTH_TEST);
+
+		GL.disable(GL.DEPTH_TEST);
+		let s = 200;
+		GL.viewport(0, 0, s, s);
+		this._bCopy.draw(this._noises.texture0);
+		GL.viewport(s, 0, s, s);
+		this._bCopy.draw(this._noises.texture1);
+		GL.enable(GL.DEPTH_TEST);
 	}
 
 

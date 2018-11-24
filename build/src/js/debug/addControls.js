@@ -11,10 +11,11 @@ export default (scene) => {
 		gui.add(Config, 'floorRadius', 1, 5).onFinishChange(Settings.reload);
 		gui.add(Config, 'maxFloorHeight', 0, 1).onFinishChange(Settings.refresh);
 		gui.add(Config, 'treeBumpHeight', 0, 1).onFinishChange(Settings.reload);
-		gui.add(Config, 'numSlides', 1, 50).step(1).onFinishChange(Settings.reload);
+		gui.add(Config, 'numSlides', 1, 200).step(1).onFinishChange(Settings.reload);
 		gui.add(Config, 'noiseScale', 1, 10).onFinishChange(Settings.reload);
 		gui.add(Config, 'overlayOpacity', 0, 1).onChange(Settings.refresh);
 		gui.add(Config, 'bloomStrength', 0, 1).onChange(Settings.refresh);
+		gui.add(Config, 'fogMovingSpeed', 0, 1).onChange(Settings.refresh);
 		gui.add(Config, 'fxaa').name('Post Effect').onChange(Settings.refresh);
 		gui.add(scene, 'resetCamera');
 

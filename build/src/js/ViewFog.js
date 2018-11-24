@@ -17,21 +17,16 @@ class ViewFog extends alfrid.View {
 		this.mesh = alfrid.Geom.plane(s, s, 1);
 
 		const { numSlides } = Config;
-		this.matrices = [];
+		const posOffset = [];
 
 		for(let i=0; i<numSlides; i++) {
-			const mtx = mat4.create();
 			let z = (i/numSlides - 0.5) * s;
-			mat4.translate(mtx, mtx, vec3.fromValues(0, s/2, z));
-			this.matrices.push(mtx);
+			posOffset.push([0, s/2, z]);
 		}
 
 		this.offset = 0.5;
 
-
-		// setTimeout(()=> {
-		// 	gui.add(this, 'offset', 0, 1);
-		// }, 600);
+		this.mesh.bufferInstance(posOffset, 'aPosOffset');
 	}
 
 
@@ -46,11 +41,13 @@ class ViewFog extends alfrid.View {
 		this.shader.uniform("texture1", "uniform1i", 1);
 		texture1.bind(1);
 		this.shader.uniform("uPercent", "float", percent);
+		this.shader.uniform("uSize", "float", Config.floorRadius);
 
-		this.matrices.forEach( mtx => {
-			this.shader.uniform("uLocalMatrix", "mat4", mtx);
-			GL.draw(this.mesh);	
-		});
+		// this.matrices.forEach( mtx => {
+		// 	this.shader.uniform("uLocalMatrix", "mat4", mtx);
+			
+		// });
+		GL.draw(this.mesh);	
 		GL.enableAlphaBlending();
 	}
 
