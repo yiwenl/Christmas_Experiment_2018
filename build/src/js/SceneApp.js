@@ -4,7 +4,6 @@ import alfrid, { Scene, GL } from 'alfrid';
 import Assets from './Assets';
 import Settings from './Settings';
 import Config from './Config';
-import Noise3DTexture from './Noise3DTexture';
 import Noise3D from './Noise3D';
 
 import { generateTrees, generateHeightMap } from './utils';
@@ -22,7 +21,7 @@ import PassBloom from './PassBloom';
 import addControls from './debug/addControls';
 
 const fboScale = 1.5;
-const interval = 15;
+const interval = 25;
 
 class SceneApp extends Scene {
 	constructor() {
@@ -71,9 +70,6 @@ class SceneApp extends Scene {
 
 		this._fboRender = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 
-		this._noise3D = new Noise3DTexture(Config.noiseNum, Config.noiseScale);
-		this._noise3D.render();
-
 		this._noises = new Noise3D();
 	}
 
@@ -101,7 +97,7 @@ class SceneApp extends Scene {
 
 	next() {
 		console.log('next');
-		const animals = ['deer', 'whale'];
+		const animals = ['deer', 'whale', 'bear'];
 		let index = animals.indexOf(Config.animal);
 		index++;
 		if(index >= animals.length) {

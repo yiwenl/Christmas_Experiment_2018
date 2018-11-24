@@ -117,7 +117,6 @@ void main(void) {
 	offset += 0.5;
 	vec3 noise = curlNoise(vec3(vTextureCoord, uZ ) * uNoiseScale * offset);
 	noise = noise * .5 + .5;
-	noise *= smoothstep(0.3, 0.4, vTextureCoord.y);
 
 	gl_FragColor = vec4(noise, 1.0);
 }

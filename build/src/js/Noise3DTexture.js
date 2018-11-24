@@ -9,8 +9,6 @@ class Noise3DTexture {
 		this.noiseScale = mNoiseScale;
 		this._seed = mSeed;
 
-		console.log('seed', this._seed);
-
 		this._init();
 	}
 
