@@ -274,13 +274,6 @@ class SceneApp extends Scene {
 		} else {
 			this._bCopy.draw(this._fboRender.getTexture());	
 		}
-		
-
-		GL.disable(GL.DEPTH_TEST);	
-		let s = 300;
-		GL.viewport(0, 0, s, s/GL.aspectRatio);
-		this._bCopy.draw(this._fboCapture.getDepthTexture());
-		GL.enable(GL.DEPTH_TEST);	
 	}
 
 

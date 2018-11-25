@@ -18,6 +18,9 @@ class ViewFXAA extends alfrid.View {
 		this.textureNoise = Assets.get('noise');
 		this.textureNoise.wrapS = this.textureNoise.wrapT = GL.REPEAT;
 		this.textureNoise.minFilter = this.textureNoise.magFilter = GL.NEAREST;
+
+		this.textureMap = Assets.get('gradientMap');
+		this.textureMap.minFilter = this.textureMap.magFilter = GL.NEAREST;
 	}
 
 
@@ -29,9 +32,12 @@ class ViewFXAA extends alfrid.View {
 		this.textureNoise.bind(1);
 		this.shader.uniform("textureBloom", "uniform1i", 2);
 		textureBloom.bind(2);
+		this.shader.uniform("textureMap", "uniform1i", 3);
+		this.textureMap.bind(3);
 		this.shader.uniform("uResolution", "vec2", [1/GL.width, 1/GL.height]);
 		this.shader.uniform("uOverlay", "float", Config.overlayOpacity);
 		this.shader.uniform("uBloomStrength", "float", Config.bloomStrength);
+		this.shader.uniform("uGradientMap", "float", Config.gradientMap ? 1.0 : 0.0);
 		GL.draw(this.mesh);
 	}
 

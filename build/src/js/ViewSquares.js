@@ -26,7 +26,6 @@ class ViewSquares extends alfrid.View {
 
 
 	setMatrices(camera) {
-		console.log('camera', camera);
 		mat4.invert(this.projInvert, camera.projection);
 		mat4.invert(this.viewInvert, camera.matrix);
 	}

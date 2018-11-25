@@ -15,5 +15,6 @@ export default {
 	bloomStrength:.25,
 	pixelateMixing:0.1,
 	animal:'deer',
-	fogMovingSpeed:1
+	fogMovingSpeed:1,
+	gradientMap:false
 };

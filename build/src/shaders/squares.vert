@@ -71,27 +71,25 @@ float getSurfacePosition(mat4 shadowMatrix, vec3 position, mat4 invertProj, mat4
 
 
 void main(void) {
-	float scale   = -aExtra.z + uOffset * 2.0;
-	scale         = smoothstep(0.0, 1.0, scale);
-	scale         = circularInOut(scale);
+	float scale     = -aExtra.z + uOffset * 2.0;
+	scale           = smoothstep(0.0, 1.0, scale);
+	scale           = circularInOut(scale);
 	
-	vec3 pos      = aVertexPosition;
-	pos           *= mix(aExtra.x, 1.0, .5) * scale; 
-	pos           += aPosOffset;
-
-	float z = getSurfacePosition(uMatrix, aPosOffset, uProjInvert, uViewInvert, textureDepth);
-	pos.z = z;
-	gl_Position   = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(pos, 1.0);
-	vTextureCoord = aTextureCoord;
-	vNormal       = aNormal;
-
-
-	// vec4 coord    = uMatrix * uModelMatrix * vec4(pos, 1.0);
-	// vec4 coord    = uMatrix * uModelMatrix * vec4(aPosOffset, 1.0);
-	vec4 coord = uMatrix * uModelMatrix * vec4(pos, 1.0);
-	vUV        = coord.xy / coord.w;
-	coord      = uMatrix * uModelMatrix * vec4(aPosOffset, 1.0);
-	vUVCenter  = coord.xy / coord.w;
-
-	vExtra = aExtra;
+	vec3 pos        = aVertexPosition;
+	pos             *= mix(aExtra.x, 1.0, .5) * scale; 
+	pos             += aPosOffset;
+	
+	float z         = getSurfacePosition(uMatrix, aPosOffset, uProjInvert, uViewInvert, textureDepth);
+	pos.z           = z;
+	vScreenPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(pos, 1.0);
+	gl_Position     = vScreenPosition;
+	vTextureCoord   = aTextureCoord;
+	vNormal         = aNormal;
+	
+	vec4 coord      = uMatrix * uModelMatrix * vec4(pos, 1.0);
+	vUV             = coord.xy / coord.w;
+	coord           = uMatrix * uModelMatrix * vec4(aPosOffset, 1.0);
+	vUVCenter       = coord.xy / coord.w;
+	
+	vExtra          = aExtra;
 }

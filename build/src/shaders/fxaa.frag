@@ -7,9 +7,11 @@ varying vec2 vTextureCoord;
 uniform sampler2D texture;
 uniform sampler2D textureNoise;
 uniform sampler2D textureBloom;
+uniform sampler2D textureMap;
 uniform vec2 uResolution;
 uniform float uBloomStrength;
 uniform float uOverlay;
+uniform float uGradientMap;
 
 
 float FXAA_SUBPIX_SHIFT = 1.0/4.0;
@@ -71,6 +73,11 @@ vec3 blendOverlay(vec3 base, vec3 blend, float opacity) {
 	return mix(base, blended, opacity);
 }
 
+float luma(vec3 color) {
+  return dot(color, vec3(0.299, 0.587, 0.114));
+}
+
+
 void main(void) {
     float t = abs(vTextureCoord.x - .5);
     t = smoothstep(0.3, 0.0, t);
@@ -79,8 +86,18 @@ void main(void) {
     vec3 bloom = texture2D(textureBloom, vTextureCoord).rgb;
     color.rgb += bloom.rgb * uBloomStrength * t;
 
+    if(uGradientMap > .5) {
+        float l = luma(color.rgb);
+        vec2 uvGradient = vec2(l, .5);
+        color.rgb = texture2D(textureMap, uvGradient).rgb;    
+    }
+
 	vec2 uv = vTextureCoord * 5.0;
 	vec3 noise = texture2D(textureNoise, uv).rgb;
 	color.rgb = blendOverlay(color.rgb, noise, uOverlay);
+
+    
+    
+
 	gl_FragColor = color;
 }
