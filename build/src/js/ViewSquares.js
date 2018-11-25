@@ -18,7 +18,17 @@ class ViewSquares extends alfrid.View {
 		let size = .2;
 		this.mesh = alfrid.Geom.plane(size, size, 1);
 		this.offset = new alfrid.TweenNumber(0, 'linear', 0.005);
+
+		this.viewInvert = mat4.create();
+		this.projInvert = mat4.create();
 		this.reset();
+	}
+
+
+	setMatrices(camera) {
+		console.log('camera', camera);
+		mat4.invert(this.projInvert, camera.projection);
+		mat4.invert(this.viewInvert, camera.matrix);
 	}
 
 
@@ -50,11 +60,15 @@ class ViewSquares extends alfrid.View {
 	}
 
 
-	render(mMatrix, mTexture) {
+	render(mMatrix, mTexture, mDepth) {
 		this.shader.bind();
 		this.shader.uniform("texture", "uniform1i", 0);
 		mTexture.bind(0);
+		this.shader.uniform("textureDepth", "uniform1i", 1);
+		mDepth.bind(1);
 		this.shader.uniform("uMatrix", "mat4", mMatrix);
+		this.shader.uniform("uViewInvert", "mat4", this.viewInvert);
+		this.shader.uniform("uProjInvert", "mat4", this.projInvert);
 		this.shader.uniform("uOffset", "float", this.offset.value);
 		this.shader.uniform("uMixing", "float", Config.pixelateMixing);
 		GL.draw(this.mesh);

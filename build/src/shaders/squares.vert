@@ -11,7 +11,11 @@ uniform mat4 uModelMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uProjectionMatrix;
 uniform mat4 uMatrix;
+uniform mat4 uViewInvert;
+uniform mat4 uProjInvert;
 uniform float uOffset;
+
+uniform sampler2D textureDepth;
 
 varying vec2 vTextureCoord;
 varying vec3 vNormal;
@@ -47,6 +51,25 @@ float cubicOut(float t) {
   return f * f * f + 1.0;
 }
 
+
+float getSurfacePosition(mat4 shadowMatrix, vec3 position, mat4 invertProj, mat4 invertView, sampler2D textureDepth) {
+    
+    //  get the shadow coord
+	vec4 vShadowCoord = shadowMatrix * uModelMatrix * vec4(position, 1.0);
+	vec4 shadowCoord  = vShadowCoord / vShadowCoord.w;
+	vec2 uv           = shadowCoord.xy;
+
+    //  reconstruct world position from depth buffer
+	float depth             = texture2D(textureDepth, uv).r;
+	float z                 = depth * 2.0 - 1.0;
+	vec4 clipSpacePosition  = vec4(uv * 2.0 - 1.0, z, 1.0);
+	vec4 viewSpacePosition  = invertProj * clipSpacePosition;
+	viewSpacePosition       /= viewSpacePosition.w;
+	vec4 worldSpacePosition = invertView * viewSpacePosition;
+    return worldSpacePosition.z;
+}
+
+
 void main(void) {
 	float scale   = -aExtra.z + uOffset * 2.0;
 	scale         = smoothstep(0.0, 1.0, scale);
@@ -55,6 +78,9 @@ void main(void) {
 	vec3 pos      = aVertexPosition;
 	pos           *= mix(aExtra.x, 1.0, .5) * scale; 
 	pos           += aPosOffset;
+
+	float z = getSurfacePosition(uMatrix, aPosOffset, uProjInvert, uViewInvert, textureDepth);
+	pos.z = z;
 	gl_Position   = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(pos, 1.0);
 	vTextureCoord = aTextureCoord;
 	vNormal       = aNormal;
@@ -63,9 +89,9 @@ void main(void) {
 	// vec4 coord    = uMatrix * uModelMatrix * vec4(pos, 1.0);
 	// vec4 coord    = uMatrix * uModelMatrix * vec4(aPosOffset, 1.0);
 	vec4 coord = uMatrix * uModelMatrix * vec4(pos, 1.0);
-	vUV        = coord.xy / coord.w * .5 + .5;
+	vUV        = coord.xy / coord.w;
 	coord      = uMatrix * uModelMatrix * vec4(aPosOffset, 1.0);
-	vUVCenter  = coord.xy / coord.w * .5 + .5;
+	vUVCenter  = coord.xy / coord.w;
 
 	vExtra = aExtra;
 }

@@ -52,8 +52,17 @@ class SceneApp extends Scene {
 		this.cameraFront.setPerspective(fov, GL.aspectRatio, near, far);
 		this.cameraFront.lookAt([0, 0, 5], [0, 0, 0]);
 
+		this._biasMatrix = mat4.fromValues(
+			0.5, 0.0, 0.0, 0.0,
+			0.0, 0.5, 0.0, 0.0,
+			0.0, 0.0, 0.5, 0.0,
+			0.5, 0.5, 0.5, 1.0
+		);
+
 		this._mtxFront = mat4.create();
 		mat4.mul(this._mtxFront, this.cameraFront.projection, this.cameraFront.matrix);
+		mat4.mul(this._mtxFront, this._biasMatrix, this._mtxFront);
+		this._vSquares.setMatrices(this.cameraFront);
 
 		this._isInTransition = false;
 		this._hasOpened = false;
@@ -63,6 +72,22 @@ class SceneApp extends Scene {
 		window.addEventListener('keydown', (e)=> {
 			if(e.keyCode === 32) {
 				this.next();
+			}
+		});
+
+
+		this._haslocked = false;
+
+
+		window.addEventListener('touchend', () => {
+			if(Math.random() > .8 && !this._haslocked) {
+
+				this.next();
+				this._haslocked = true;
+
+				setTimeout(()=> {
+					this._haslocked = false;
+				}, 15000);
 			}
 		});
 
@@ -121,9 +146,9 @@ class SceneApp extends Scene {
 		// let g = 0.5;
 		//	take screen shot of current frame
 		this._fboCapture.bind();
-		GL.clear(0, 0, 0, 1);
+		GL.clear(0, 0, 0, 0);
 		GL.setMatrices(this.camera);
-		this.renderScene();
+		this.renderScene(false);
 		this._fboCapture.unbind();
 
 		//	set flag to start rendering the planes
@@ -235,7 +260,7 @@ class SceneApp extends Scene {
 
 			GL.enable(GL.DEPTH_TEST);
 			GL.rotate(this.mtx);
-			this._vSquares.render(this._mtxFront, this._fboCapture.getTexture());
+			this._vSquares.render(this._mtxFront, this._fboCapture.getTexture(), this._fboCapture.getDepthTexture());
 		} else {
 			this.renderScene();	
 		}
@@ -250,6 +275,12 @@ class SceneApp extends Scene {
 			this._bCopy.draw(this._fboRender.getTexture());	
 		}
 		
+
+		GL.disable(GL.DEPTH_TEST);	
+		let s = 300;
+		GL.viewport(0, 0, s, s/GL.aspectRatio);
+		this._bCopy.draw(this._fboCapture.getDepthTexture());
+		GL.enable(GL.DEPTH_TEST);	
 	}
 
 
@@ -261,7 +292,7 @@ class SceneApp extends Scene {
 		this._vFloor.render(this._textureFloor);
 		this._vTrees.render(this.camera.position);
 		this._vAnimal.render();
-		if(mRenderFog) {
+		if(!GL.isMobile && mRenderFog) {
 			this._vFog.render(this._noises.texture0, this._noises.texture1, this._count / interval);	
 		}
 		
@@ -277,6 +308,8 @@ class SceneApp extends Scene {
 			this.cameraFront.setAspectRatio(GL.aspectRatio);	
 			mat4.identity(this._mtxFront, this._mtxFront);
 			mat4.mul(this._mtxFront, this.cameraFront.projection, this.cameraFront.matrix);
+			mat4.mul(this._mtxFront, this._biasMatrix, this._mtxFront);
+			this._vSquares.setMatrices(this.cameraFront);
 		}
 
 		if(this._resizeTimeout !== 0) {
