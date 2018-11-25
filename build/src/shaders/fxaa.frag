@@ -86,11 +86,10 @@ void main(void) {
     vec3 bloom = texture2D(textureBloom, vTextureCoord).rgb;
     color.rgb += bloom.rgb * uBloomStrength * t;
 
-    if(uGradientMap > .5) {
-        float l = luma(color.rgb);
-        vec2 uvGradient = vec2(l, .5);
-        color.rgb = texture2D(textureMap, uvGradient).rgb;    
-    }
+    float l = luma(color.rgb);
+    vec2 uvGradient = vec2(l, .5);
+    vec3 colorGraded = texture2D(textureMap, uvGradient).rgb;    
+    color.rgb = mix(color.rgb, colorGraded, uGradientMap);
 
 	vec2 uv = vTextureCoord * 5.0;
 	vec3 noise = texture2D(textureNoise, uv).rgb;

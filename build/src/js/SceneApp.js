@@ -20,6 +20,7 @@ import ViewCover from './ViewCover';
 import PassBloom from './PassBloom';
 
 import addControls from './debug/addControls';
+import { TweenLite } from "gsap/TweenMax";
 
 const fboScale = 1;
 const interval = 25;
@@ -77,6 +78,10 @@ class SceneApp extends Scene {
 
 
 		this._haslocked = false;
+		this._angles = {
+			x:0, 
+			y:0
+		}
 
 
 		window.addEventListener('touchend', () => {
@@ -133,8 +138,13 @@ class SceneApp extends Scene {
 
 	next() {
 		// this.orbitalControl.lock(true);
+		this._angles.x *= 0.1;
+		this._angles.y *= 0.1;
 
-		console.log('easing', this.orbitalControl.rx.easing);
+		// this._angles = {
+		// 	x:0, 
+		// 	y:0
+		// }
 		
 		const animals = ['deer', 'whale', 'bear'];
 		let index = animals.indexOf(Config.animal);
@@ -160,6 +170,7 @@ class SceneApp extends Scene {
 		this.orbitalControl.ry.setTo(0);
 		this.orbitalControl.radius.setTo(5);
 		this.orbitalControl._loop();
+		this.orbitalControl.lock(true);
 		//	move camera to side to hide the planes
 
 		//	reset planes position
@@ -178,12 +189,18 @@ class SceneApp extends Scene {
 		}, 1000);
 
 		setTimeout(() => {
-			const easing = 0.02;
-			this.orbitalControl.rx.easing = easing;
-			this.orbitalControl.ry.easing = easing;
+			// const easing = 0.02;
+			// this.orbitalControl.rx.easing = easing;
+			// this.orbitalControl.ry.easing = easing;
 
-			this.orbitalControl.rx.value = -0.1;
-			this.orbitalControl.ry.value = random(-0.3, 0.3);
+			TweenLite.killTweensOf(this._angles);
+			// TweenLite.killTweensOf(this.orbitalControl.ry);
+
+			TweenLite.to(this._angles, 3, {"x":-0.1, "y":random(-0.3, 0.3), ease: Circ.easeInOut});
+			// TweenLite.to(this.orbitalControl.ry, .1, {"value":random(-0.3, 0.3), ease: Circ.easeIn});
+
+			// this.orbitalControl.rx.value = -0.1;
+			// this.orbitalControl.ry.value = random(-0.3, 0.3);
 			
 			this._vSquares.close();
 			this._vCover.close();
@@ -193,10 +210,12 @@ class SceneApp extends Scene {
 
 		setTimeout(() => {
 			this._isInTransition = false;
+			this._angles.x = this._angles.y = 0;
+			this.orbitalControl.lock(false);
 
-			const easing = 0.05;
-			this.orbitalControl.rx.easing = easing;
-			this.orbitalControl.ry.easing = easing;
+			// const easing = 0.05;
+			// this.orbitalControl.rx.easing = easing;
+			// this.orbitalControl.ry.easing = easing;
 			// this.orbitalControl.lock(false);
 		}, 6000);
 
@@ -236,6 +255,11 @@ class SceneApp extends Scene {
 		this._count ++;
 		if(this._count >= interval) {
 			this.updateFog();
+		}
+
+		if(this._isInTransition) {
+			this.orbitalControl.rx.setTo(this._angles.x);
+			this.orbitalControl.ry.setTo(this._angles.y);
 		}
 		GL.clear(0, 0, 0, 1);
 

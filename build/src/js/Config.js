@@ -16,5 +16,5 @@ export default {
 	pixelateMixing:0.1,
 	animal:'deer',
 	fogMovingSpeed:1,
-	gradientMap:false
+	gradientMap:0.5
 };

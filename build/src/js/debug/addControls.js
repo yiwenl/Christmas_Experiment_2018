@@ -17,7 +17,7 @@ export default (scene) => {
 		gui.add(Config, 'bloomStrength', 0, 1).onChange(Settings.refresh);
 		gui.add(Config, 'fogMovingSpeed', 0, 1).onChange(Settings.refresh);
 		gui.add(Config, 'pixelateMixing', 0, 1).onChange(Settings.refresh);
-		gui.add(Config, 'gradientMap').name('Gradient Map').onChange(Settings.refresh);
+		gui.add(Config, 'gradientMap', 0, 1).name('Gradient Map').onChange(Settings.refresh);
 		gui.add(Config, 'fxaa').name('Post Effect').onChange(Settings.refresh);
 		gui.add(scene, 'resetCamera');
 

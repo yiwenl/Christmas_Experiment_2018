@@ -37,7 +37,7 @@ class ViewFXAA extends alfrid.View {
 		this.shader.uniform("uResolution", "vec2", [1/GL.width, 1/GL.height]);
 		this.shader.uniform("uOverlay", "float", Config.overlayOpacity);
 		this.shader.uniform("uBloomStrength", "float", Config.bloomStrength);
-		this.shader.uniform("uGradientMap", "float", Config.gradientMap ? 1.0 : 0.0);
+		this.shader.uniform("uGradientMap", "float", Config.gradientMap);
 		GL.draw(this.mesh);
 	}
 
