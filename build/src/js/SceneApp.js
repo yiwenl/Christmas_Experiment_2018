@@ -34,8 +34,8 @@ class SceneApp extends Scene {
 		this.resize();
 		GL.enableAlphaBlending();
 		this.orbitalControl.radius.value = 5;
-		this.orbitalControl.radius.limit(3, 5.5);
-		this.orbitalControl.rx.limit(-.1, .2);
+		this.orbitalControl.radius.limit(5, 5);
+		this.orbitalControl.rx.limit(-.1, .1);
 		const easing = 0.05;
 		this.orbitalControl.rx.easing = easing;
 		this.orbitalControl.ry.easing = easing;
@@ -45,10 +45,11 @@ class SceneApp extends Scene {
 
 		//	setup front camera for projection
 		this.cameraFront = new alfrid.CameraPerspective();
-		const fov = 60 * Math.PI / 180;
+		const fov = 50 * Math.PI / 180;
 		const far = 15;
-		this.camera.setPerspective(fov, GL.aspectRatio, 1, far);
-		this.cameraFront.setPerspective(fov, GL.aspectRatio, 1, far);
+		const near = 1;
+		this.camera.setPerspective(fov, GL.aspectRatio, near, far);
+		this.cameraFront.setPerspective(fov, GL.aspectRatio, near, far);
 		this.cameraFront.lookAt([0, 0, 5], [0, 0, 0]);
 
 		this._mtxFront = mat4.create();

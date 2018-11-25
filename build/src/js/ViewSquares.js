@@ -17,15 +17,8 @@ class ViewSquares extends alfrid.View {
 	_init() {
 		let size = .2;
 		this.mesh = alfrid.Geom.plane(size, size, 1);
-		// this.offset = new alfrid.EaseNumber(0, 0.01);
-		this.offset = new alfrid.TweenNumber(0, 'linear');
-
+		this.offset = new alfrid.TweenNumber(0, 'linear', 0.005);
 		this.reset();
-
-		setTimeout(()=> {
-			gui.add(this, 'open');
-			gui.add(this, 'close');
-		}, 500);
 	}
 
 
@@ -46,11 +39,13 @@ class ViewSquares extends alfrid.View {
 
 
 	open() {
+		this.offset.speed = 0.01;
 		this.offset.value = 1;
 	}
 
 
 	close() {
+		this.offset.speed = 0.005;
 		this.offset.value = 0;
 	}
 

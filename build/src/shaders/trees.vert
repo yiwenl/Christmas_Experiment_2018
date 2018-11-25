@@ -10,6 +10,7 @@ uniform mat4 uModelMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uProjectionMatrix;
 uniform float uTreeScale;
+uniform vec3 uCamPos;
 
 varying vec2 vTextureCoord;
 varying vec3 vNormal;
@@ -23,13 +24,23 @@ vec2 rotate(vec2 v, float a) {
 }
 
 void main(void) {
+	float d = distance(uCamPos.xz, aPosOffset.xy);
+	float t = smoothstep(1.0, 2.5, d);
+	t = mix(1.0, t, .5);
+
+	
 	vec3 pos        = aVertexPosition;
 	float scale     = mix(aPosOffset.z, 1.0, .25);
 	pos.xz          = rotate(pos.xz, aPosOffset.w);
+	pos.xz 			*= t;
 	pos.y           *= 3.0;
 	pos.y           -= 3.0;
 	pos             *= scale * uTreeScale;
+
 	pos.xz          += aPosOffset.xy;
+
+
+
 	
 	vScreenPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(pos, 1.0);
 	gl_Position     = vScreenPosition;
