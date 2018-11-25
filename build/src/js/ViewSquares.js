@@ -15,7 +15,7 @@ class ViewSquares extends alfrid.View {
 
 
 	_init() {
-		let size = .2;
+		let size = .15;
 		this.mesh = alfrid.Geom.plane(size, size, 1);
 		this.offset = new alfrid.TweenNumber(0, 'linear', 0.005);
 
@@ -32,7 +32,7 @@ class ViewSquares extends alfrid.View {
 
 
 	reset() {
-		let i = 10000;
+		let i = 20000;
 		let positions = [];
 		let extras = [];
 		let r = 3.5;

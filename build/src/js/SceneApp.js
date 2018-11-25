@@ -17,6 +17,7 @@ import ViewFXAA from './ViewFXAA';
 import ViewAnimal from './ViewAnimal';
 import ViewSquares from './ViewSquares';
 import ViewCover from './ViewCover';
+import ViewSnow from './ViewSnow';
 import PassBloom from './PassBloom';
 
 import addControls from './debug/addControls';
@@ -120,16 +121,16 @@ class SceneApp extends Scene {
 		this._bCopy = new alfrid.BatchCopy();
 		this._bBall = new alfrid.BatchBall();
 
-		this._vFloor  = new ViewFloor();
-		this._vTrees  = new ViewTrees();
-		this._vBg     = new ViewBg();
-		this._vAnimal = new ViewAnimal();
-		this._vGround = new ViewGround();
-		this._vFog    = new ViewFog();
-		this._vFxaa   = new ViewFXAA();
-		this._vSquares = new ViewSquares();
-		this._vCover = new ViewCover();
-
+		this._vFloor    = new ViewFloor();
+		this._vTrees    = new ViewTrees();
+		this._vBg       = new ViewBg();
+		this._vAnimal   = new ViewAnimal();
+		this._vSnow     = new ViewSnow();
+		this._vGround   = new ViewGround();
+		this._vFog      = new ViewFog();
+		this._vFxaa     = new ViewFXAA();
+		this._vSquares  = new ViewSquares();
+		this._vCover    = new ViewCover();
 		this._passBloom = new PassBloom(3);
 
 		this._resetTreePosition();
@@ -307,6 +308,9 @@ class SceneApp extends Scene {
 		this._vBg.render();
 		this._vGround.render();
 		this._vFloor.render(this._textureFloor);
+		if(Config.showSnow) {
+			this._vSnow.render();	
+		}
 		this._vTrees.render(this.camera.position);
 		this._vAnimal.render();
 		if(!GL.isMobile && mRenderFog) {

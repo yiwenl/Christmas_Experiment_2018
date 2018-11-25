@@ -24,7 +24,11 @@ class ViewFog extends alfrid.View {
 			posOffset.push([0, s/2, z]);
 		}
 
-		this.offset = 0.5;
+		this.offset = 0.45;
+
+		setTimeout(()=> {
+			gui.add(this, 'offset', 0, 1);
+		}, 500);
 
 		this.mesh.bufferInstance(posOffset, 'aPosOffset');
 	}
