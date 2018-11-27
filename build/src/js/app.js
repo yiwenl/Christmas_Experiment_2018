@@ -6,6 +6,7 @@ import AssetsLoader from 'assets-loader';
 
 import assets from './asset-list';
 import Assets from './Assets';
+import Config from './Config';
 
 if(document.body) {
 	_init();
@@ -64,6 +65,9 @@ function _init3D() {
 
 	//	INIT 3D TOOL
 	GL.init(canvas, {ignoreWebgl2:true});
+	if(GL.isMobile) {
+		Config.numSlides = 25;
+	}
 
 	//	INIT ASSETS
 	Assets.init();

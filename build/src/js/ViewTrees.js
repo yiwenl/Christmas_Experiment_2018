@@ -44,9 +44,10 @@ class ViewTrees extends alfrid.View {
 	}
 
 
-	render() {
+	render(mCamPos) {
 		this.shader.bind();
 		this.shader.uniform("uTreeScale", "float", Config.treeScale);
+		this.shader.uniform("uCamPos", "vec3", mCamPos);
 		GL.draw(this.mesh);
 	}
 

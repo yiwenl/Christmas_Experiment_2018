@@ -110,13 +110,12 @@ vec3 curlNoise( vec3 p ){
 }
 
 void main(void) {
+	vec3 offset = curlNoise(vec3(vTextureCoord, uSeed) ) * .5 + .5;
+	offset      = mix(offset, vec3(1.0), .5);
+	offset      += 0.5;
+	vec3 noise  = curlNoise(vec3(vTextureCoord, uZ ) * uNoiseScale * offset);
+	noise       = noise * .5 + .5;
 
-	vec3 offset = curlNoise(vec3(vTextureCoord, uSeed)) * .5 + .5;
-	offset = mix(offset, vec3(1.0), .5);
-	offset += 0.5;
-	vec3 noise = curlNoise(vec3(vTextureCoord, uZ ) * uNoiseScale * offset);
-
-	noise = noise * .5 + .5;
 
 	gl_FragColor = vec4(noise, 1.0);
 }
