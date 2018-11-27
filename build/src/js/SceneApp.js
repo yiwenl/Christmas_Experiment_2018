@@ -37,7 +37,7 @@ class SceneApp extends Scene {
 		GL.enableAlphaBlending();
 		this.orbitalControl.radius.value = 5;
 		this.orbitalControl.radius.limit(5, 5);
-		this.orbitalControl.rx.limit(-.1, .1);
+		this.orbitalControl.rx.limit(-.15, .05);
 		const easing = 0.05;
 		this.orbitalControl.rx.easing = easing;
 		this.orbitalControl.ry.easing = easing;
@@ -101,8 +101,6 @@ class SceneApp extends Scene {
 	}
 
 	_initTextures() {
-		
-
 		this._fboCapture = new alfrid.FrameBuffer(GL.width, GL.height, {
 			minFilter:GL.LINEAR,
 			magFilter:GL.LINEAR
@@ -110,6 +108,7 @@ class SceneApp extends Scene {
 
 		this._fboRender = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 		this._fboTemp = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
+		this._fboDepth = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 
 		this._noises = new Noise3D(Config.noiseNum, Config.noiseScale);
 	}
@@ -159,8 +158,14 @@ class SceneApp extends Scene {
 		this._fboCapture.bind();
 		GL.clear(0, 0, 0, 0);
 		GL.setMatrices(this.camera);
-		this.renderScene(false);
+		this.renderScene();
 		this._fboCapture.unbind();
+
+		this._fboDepth.bind();
+		GL.clear(0, 0, 0, 0);
+		GL.setMatrices(this.camera);
+		this.renderScene(false);
+		this._fboDepth.unbind();
 
 		//	set flag to start rendering the planes
 		this._hasOpened = false;
@@ -285,7 +290,7 @@ class SceneApp extends Scene {
 
 			GL.enable(GL.DEPTH_TEST);
 			GL.rotate(this.mtx);
-			this._vSquares.render(this._mtxFront, this._fboCapture.getTexture(), this._fboCapture.getDepthTexture());
+			this._vSquares.render(this._mtxFront, this._fboCapture.getTexture(), this._fboDepth.getDepthTexture());
 		} else {
 			this.renderScene();	
 		}
@@ -344,6 +349,7 @@ class SceneApp extends Scene {
 			});
 
 			this._fboRender = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
+			this._fboDepth = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 			this._fboTemp = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 		}, 1000/60 * 5)
 		

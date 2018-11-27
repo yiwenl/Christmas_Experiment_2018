@@ -18,5 +18,5 @@ export default {
 	fogMovingSpeed:.5,
 	gradientMap:0.5,
 	showSnow:true,
-	snowSpeed:1
+	snowSpeed:.5
 };

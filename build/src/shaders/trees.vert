@@ -30,7 +30,7 @@ void main(void) {
 
 	
 	vec3 pos        = aVertexPosition;
-	float scale     = mix(aPosOffset.z, 1.0, .25);
+	float scale     = mix(aPosOffset.z, 1.0, .3);
 	pos.xz          = rotate(pos.xz, aPosOffset.w);
 	pos.xz 			*= t;
 	pos.y           *= 3.0;
