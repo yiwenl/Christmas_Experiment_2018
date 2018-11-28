@@ -4,6 +4,22 @@ import Settings from '../Settings';
 import Config from '../Config';
 import { saveJson } from '../utils';
 
+
+const simulateKey = (keyCode, type, modifiers) => {
+	var evtName = (typeof(type) === "string") ? "key" + type : "keydown";	
+	var modifier = (typeof(modifiers) === "object") ? modifier : {};
+
+	var event = document.createEvent("HTMLEvents");
+	event.initEvent(evtName, true, false);
+	event.keyCode = keyCode;
+	
+	for (var i in modifiers) {
+		event[i] = modifiers[i];
+	}
+
+	document.dispatchEvent(event);
+}
+
 export default (scene) => {
 	setTimeout(()=> {
 		gui.add(Config, 'numTrees', 1, 100).step(1).onFinishChange(Settings.reload);
@@ -31,5 +47,9 @@ export default (scene) => {
 		}
 
 		gui.add(o, 'saveSettings').name('Save Settings');
+		setTimeout(()=> {
+			simulateKey(72);
+		}, 500);
+		
 	}, 500);
 }
