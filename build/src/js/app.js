@@ -67,6 +67,7 @@ function _init3D() {
 	GL.init(canvas, {ignoreWebgl2:true});
 	if(GL.isMobile) {
 		Config.numSlides = 25;
+		Config.showSnow = false;
 	}
 
 	//	INIT ASSETS
