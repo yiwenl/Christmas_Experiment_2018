@@ -58,17 +58,24 @@ function _onImageLoaded(o) {
 
 
 function _init3D() {
+	const container = document.body.querySelector('.container');
 	//	CREATE CANVAS
 	const canvas = document.createElement('canvas');
 	canvas.className = 'Main-Canvas';
-	document.body.appendChild(canvas);
+	container.appendChild(canvas);
 
 	//	INIT 3D TOOL
 	GL.init(canvas, {ignoreWebgl2:true});
 	if(GL.isMobile) {
 		Config.numSlides = 25;
 		Config.showSnow = false;
+
+		setTimeout(()=> {
+			document.body.classList.add('isMobile');	
+		}, 1000);
+		
 	}
+
 
 	//	INIT ASSETS
 	Assets.init();
@@ -76,5 +83,21 @@ function _init3D() {
 	//	CREATE SCENE
 	const scene = new SceneApp();
 
-	
+	//	Fullscreen
+	const btnFS = document.body.querySelector('.fullscreen');
+	const btnFSText = btnFS.querySelector('p');
+	let isInFullScreen = false;
+
+	btnFS.addEventListener('touchend', (e)=> {
+		console.log('fullscreen');
+		isInFullScreen = !isInFullScreen;
+
+		if(isInFullScreen) {
+			document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+			btnFSText.innerHTML = 'Exit Fullscreen';
+		} else {
+			document.webkitExitFullscreen();
+			btnFSText.innerHTML = 'Go Fullscreen';
+		}
+	});
 }
