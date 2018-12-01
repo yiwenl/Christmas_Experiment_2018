@@ -66,13 +66,20 @@ function _init3D() {
 
 	//	INIT 3D TOOL
 	GL.init(canvas, {ignoreWebgl2:true});
+	console.log('isMobiel :', GL.isMobile);
 	if(GL.isMobile) {
-		Config.numSlides = 25;
-		Config.showSnow = false;
+
+		var ua = navigator.userAgent;
+		if(/Chrome/i.test(ua)) {
+			setTimeout(()=> {
+				document.body.classList.add('isMobileChrome');
+			}, 1000);	
+		}
+
 
 		setTimeout(()=> {
-			document.body.classList.add('isMobile');	
-		}, 1000);
+			document.body.classList.add('isMobile');
+		}, 1000);	
 		
 	}
 

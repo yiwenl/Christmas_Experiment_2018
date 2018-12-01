@@ -19,18 +19,27 @@ import ViewSquares from './ViewSquares';
 import ViewCover from './ViewCover';
 import ViewSnow from './ViewSnow';
 import PassBloom from './PassBloom';
+import SoundManager from './SoundManager';
 
 import addControls from './debug/addControls';
 import { TweenLite } from "gsap/TweenMax";
 
-const fboScale = 1;
+let fboScale = 1;
 const interval = 25;
 
 var random = function(min, max) { return min + Math.random() * (max - min);	}
 
 class SceneApp extends Scene {
 	constructor() {
+
+		if(GL.isMobile) {
+			fboScale = 0.8;
+		}
 		Settings.init();
+
+		Config.numSlides = 25;
+		Config.showSnow = false;
+		Settings.refresh();
 
 		super();
 		this.resize();
@@ -97,7 +106,7 @@ class SceneApp extends Scene {
 			}
 		});
 
-		addControls(this);
+		// addControls(this);
 	}
 
 	_initTextures() {
@@ -137,14 +146,12 @@ class SceneApp extends Scene {
 
 
 	next() {
+		if(!document.body.classList.contains('hasInteract')) {
+			document.body.classList.add('hasInteract');
+		}
 		// this.orbitalControl.lock(true);
 		this._angles.x *= 0.1;
 		this._angles.y *= 0.1;
-
-		// this._angles = {
-		// 	x:0, 
-		// 	y:0
-		// }
 		
 		const animals = ['deer', 'whale', 'bear'];
 		let index = animals.indexOf(Config.animal);
@@ -195,18 +202,8 @@ class SceneApp extends Scene {
 		}, 1000);
 
 		setTimeout(() => {
-			// const easing = 0.02;
-			// this.orbitalControl.rx.easing = easing;
-			// this.orbitalControl.ry.easing = easing;
-
 			TweenLite.killTweensOf(this._angles);
-			// TweenLite.killTweensOf(this.orbitalControl.ry);
-
 			TweenLite.to(this._angles, 3, {"x":-0.1, "y":random(-0.3, 0.3), ease: Circ.easeInOut});
-			// TweenLite.to(this.orbitalControl.ry, .1, {"value":random(-0.3, 0.3), ease: Circ.easeIn});
-
-			// this.orbitalControl.rx.value = -0.1;
-			// this.orbitalControl.ry.value = random(-0.3, 0.3);
 			
 			this._vSquares.close();
 			this._vCover.close();
@@ -218,11 +215,6 @@ class SceneApp extends Scene {
 			this._isInTransition = false;
 			this._angles.x = this._angles.y = 0;
 			this.orbitalControl.lock(false);
-
-			// const easing = 0.05;
-			// this.orbitalControl.rx.easing = easing;
-			// this.orbitalControl.ry.easing = easing;
-			// this.orbitalControl.lock(false);
 		}, 6000);
 
 		//	when camera in position ( planes not visible )
