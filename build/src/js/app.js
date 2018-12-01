@@ -3,10 +3,13 @@ import debugPolyfill from './debug/debugPolyfill';
 import alfrid, { GL } from 'alfrid';
 import SceneApp from './SceneApp';
 import AssetsLoader from 'assets-loader';
+import LoadingAnim from './LoadingAnim';
 
 import assets from './asset-list';
 import Assets from './Assets';
 import Config from './Config';
+
+let loadingAnim;
 
 if(document.body) {
 	_init();
@@ -16,6 +19,9 @@ if(document.body) {
 
 
 function _init() {
+
+	loadingAnim = new LoadingAnim();
+
 
 	//	LOADING ASSETS
 	if(assets.length > 0) {
@@ -107,4 +113,14 @@ function _init3D() {
 			btnFSText.innerHTML = 'Go Fullscreen';
 		}
 	});
+
+
+	loadingAnim.on('onAnimClosed', () => {
+		scene.open();
+
+		setTimeout(()=> {
+			document.body.classList.add('isOpened');
+		}, 1000);
+	});
+	loadingAnim.close();
 }

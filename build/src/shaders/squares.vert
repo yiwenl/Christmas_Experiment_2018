@@ -23,6 +23,7 @@ varying vec2 vUV;
 varying vec2 vUVCenter;
 varying vec4 vScreenPosition;
 varying vec3 vExtra;
+varying vec3 vDebug;
 
 float cubicInOut(float t) {
   return t < 0.5
@@ -66,7 +67,7 @@ float getSurfacePosition(mat4 shadowMatrix, vec3 position, mat4 invertProj, mat4
 	vec4 viewSpacePosition  = invertProj * clipSpacePosition;
 	viewSpacePosition       /= viewSpacePosition.w;
 	vec4 worldSpacePosition = invertView * viewSpacePosition;
-    return worldSpacePosition.z;
+    return worldSpacePosition.z * 0.5;
 }
 
 
@@ -79,8 +80,6 @@ void main(void) {
 	pos             *= mix(aExtra.x, 1.0, .5) * scale; 
 	pos             += aPosOffset;
 	
-	float z         = getSurfacePosition(uMatrix, aPosOffset, uProjInvert, uViewInvert, textureDepth);
-	pos.z           = z;
 	vScreenPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(pos, 1.0);
 	gl_Position     = vScreenPosition;
 	vTextureCoord   = aTextureCoord;

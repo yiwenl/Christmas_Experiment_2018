@@ -13,7 +13,7 @@ export default {
 	fxaa:true,
 	overlayOpacity:.25,
 	bloomStrength:.25,
-	pixelateMixing:0.1,
+	pixelateMixing:0.05,
 	animal:'deer',
 	fogMovingSpeed:.5,
 	gradientMap:0.5,

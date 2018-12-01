@@ -2,7 +2,7 @@
 
 import alfrid, { Scene, GL } from 'alfrid';
 import Assets from './Assets';
-import Settings from './Settings';
+// import Settings from './Settings';
 import Config from './Config';
 import Noise3D from './Noise3D';
 
@@ -35,18 +35,17 @@ class SceneApp extends Scene {
 		if(GL.isMobile) {
 			fboScale = 0.8;
 		}
-		Settings.init();
+		// Settings.init();
 
-		Config.numSlides = 25;
 		Config.showSnow = false;
-		Settings.refresh();
+		// Settings.refresh();
 
 		super();
 		this.resize();
 		GL.enableAlphaBlending();
 		this.orbitalControl.radius.value = 5;
 		this.orbitalControl.radius.limit(5, 5);
-		this.orbitalControl.rx.limit(-.15, .05);
+		this.orbitalControl.rx.limit(-.15, .0);
 		const easing = 0.05;
 		this.orbitalControl.rx.easing = easing;
 		this.orbitalControl.ry.easing = easing;
@@ -109,6 +108,10 @@ class SceneApp extends Scene {
 		// addControls(this);
 	}
 
+	open() {
+		this._vOpeningCover.close();
+	}
+
 	_initTextures() {
 		this._fboCapture = new alfrid.FrameBuffer(GL.width, GL.height, {
 			minFilter:GL.LINEAR,
@@ -117,7 +120,6 @@ class SceneApp extends Scene {
 
 		this._fboRender = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 		this._fboTemp = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
-		this._fboDepth = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 
 		this._noises = new Noise3D(Config.noiseNum, Config.noiseScale);
 	}
@@ -139,6 +141,8 @@ class SceneApp extends Scene {
 		this._vFxaa     = new ViewFXAA();
 		this._vSquares  = new ViewSquares();
 		this._vCover    = new ViewCover();
+		this._vOpeningCover = new ViewCover();
+		this._vOpeningCover.opacity.setTo(1);
 		this._passBloom = new PassBloom(3);
 
 		this._resetTreePosition();
@@ -152,6 +156,9 @@ class SceneApp extends Scene {
 		// this.orbitalControl.lock(true);
 		this._angles.x *= 0.1;
 		this._angles.y *= 0.1;
+
+		this._angles.x *= 0;
+		this._angles.y *= 0;
 		
 		const animals = ['deer', 'laputa', 'whale', 'bear'];
 		let index = animals.indexOf(Config.animal);
@@ -168,11 +175,6 @@ class SceneApp extends Scene {
 		this.renderScene();
 		this._fboCapture.unbind();
 
-		this._fboDepth.bind();
-		GL.clear(0, 0, 0, 0);
-		GL.setMatrices(this.camera);
-		this.renderScene(false);
-		this._fboDepth.unbind();
 
 		//	set flag to start rendering the planes
 		this._hasOpened = false;
@@ -191,7 +193,7 @@ class SceneApp extends Scene {
 		this._vSquares.open();
 
 		Config.animal = animals[index];
-		Settings.refresh();
+		// Settings.refresh();
 		this._vAnimal.setAnimal(animals[index]);
 
 		this._resetTreePosition();
@@ -282,7 +284,7 @@ class SceneApp extends Scene {
 
 			GL.enable(GL.DEPTH_TEST);
 			GL.rotate(this.mtx);
-			this._vSquares.render(this._mtxFront, this._fboCapture.getTexture(), this._fboDepth.getDepthTexture());
+			this._vSquares.render(this._mtxFront, this._fboCapture.getTexture());
 		} else {
 			this.renderScene();	
 		}
@@ -296,6 +298,10 @@ class SceneApp extends Scene {
 		} else {
 			this._bCopy.draw(this._fboRender.getTexture());	
 		}
+
+		GL.disable(GL.DEPTH_TEST);
+		this._vOpeningCover.render();
+		GL.enable(GL.DEPTH_TEST);
 	}
 
 
@@ -341,7 +347,6 @@ class SceneApp extends Scene {
 			});
 
 			this._fboRender = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
-			this._fboDepth = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 			this._fboTemp = new alfrid.FrameBuffer(GL.width * fboScale, GL.height * fboScale);
 		}, 1000/60 * 5)
 		

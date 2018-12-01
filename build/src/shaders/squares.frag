@@ -7,6 +7,7 @@ varying vec2 vTextureCoord;
 varying vec2 vUV;
 varying vec2 vUVCenter;
 varying vec3 vExtra;
+varying vec3 vDebug;
 varying vec4 vScreenPosition;
 
 uniform sampler2D texture;

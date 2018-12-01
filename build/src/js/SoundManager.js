@@ -27,7 +27,8 @@ class SoundManager {
 		if(!this._hasStarted) {
 			this._sound = sono.createSound({
 				src:'./assets/audio/music.mp3',
-				loop: true
+				loop: true,
+				volume: 0.25
 			});
 			this._hasStarted = true;
 		} 

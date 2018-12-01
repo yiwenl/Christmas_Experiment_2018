@@ -5,15 +5,7 @@ html, body {
   padding: 0;
   overflow: hidden;
   position: static;
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#6d6d6d+0,000000+100 */
-  background: #333333;
-  /* Old browsers */
-  background: -moz-radial-gradient(center, ellipse cover, #333333 0%, #000000 100%);
-  /* FF3.6-15 */
-  background: -webkit-radial-gradient(center, ellipse cover, #333333 0%, #000000 100%);
-  /* Chrome10-25,Safari5.1-6 */
-  background: radial-gradient(ellipse at center, #333333 0%, #000000 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */ }
+  background: black; }
 
 html {
   -webkit-text-size-adjust: none;
@@ -24,7 +16,22 @@ h1, h2, h3, h4, text, p {
   -webkit-font-smoothing: antialiased;
   -moz-osx-webkit-font-smoothing: antialiased;
   font-family: 'Open Sans', sans-serif;
-  user-select: none; }
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.loading-anim {
+  width: 100px;
+  height: 100px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  margin-left: -50px;
+  margin-top: -100px;
+  z-index: 9998;
+  transition: opacity 1s ease-out; }
+  .loading-anim.close {
+    opacity: 0; }
 
 .container {
   position: fixed;
@@ -32,6 +39,42 @@ h1, h2, h3, h4, text, p {
   height: 100%;
   top: 0;
   left: 0; }
+
+.audio-toggle {
+  width: 18px;
+  height: 18px;
+  position: fixed;
+  z-index: 9999;
+  bottom: 5%;
+  left: 5%;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  background-color: rgba(255, 0, 0, 0.1);
+  opacity: .5; }
+
+.sound-on {
+  background-image: url("../../assets/css-img/soundOn.png"); }
+  .isSoundOn .sound-on {
+    opacity: 0; }
+
+.sound-off {
+  background-image: url("../../assets/css-img/soundOff.png");
+  opacity: 0; }
+  .isSoundOn .sound-off {
+    opacity: 1; }
+
+.sound-icon {
+  position: absolute;
+  background-size: 100%;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  transition: opacity .5s ease-out; }
 
 .desc {
   position: fixed;
@@ -41,10 +84,14 @@ h1, h2, h3, h4, text, p {
   width: 100%;
   text-align: center;
   font-size: 12px;
-  letter-spacing: 5px; }
+  letter-spacing: 5px;
+  transition: opacity .5s ease-out; }
   .isLoading .desc {
     opacity: 0; }
-  .desc .isMobile {
+  .isMobile .desc {
+    display: none;
+    opacity: 0; }
+  .hasInteract .desc {
     opacity: 0; }
 
 .fullscreen {
@@ -108,6 +155,17 @@ div:fullscreen {
 :fullscreen .tohide {
   display: none; }
 
+.container-ui {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity .5s ease-out; }
+  .isOpened .container-ui {
+    opacity: 1; }
+
 .Message {
   position: absolute;
   z-index: 999;
@@ -127,7 +185,7 @@ div:fullscreen {
   z-index: 998;
   width: 0%;
   height: 1px;
-  top: 50%;
+  top: 55%;
   background: rgba(255, 255, 255, 0.5);
   opacity: 0;
   transition: width .5s ease-out, opacity .5s ease-out; }

@@ -59,15 +59,11 @@ class ViewSquares extends alfrid.View {
 	}
 
 
-	render(mMatrix, mTexture, mDepth) {
+	render(mMatrix, mTexture) {
 		this.shader.bind();
 		this.shader.uniform("texture", "uniform1i", 0);
 		mTexture.bind(0);
-		this.shader.uniform("textureDepth", "uniform1i", 1);
-		mDepth.bind(1);
 		this.shader.uniform("uMatrix", "mat4", mMatrix);
-		this.shader.uniform("uViewInvert", "mat4", this.viewInvert);
-		this.shader.uniform("uProjInvert", "mat4", this.projInvert);
 		this.shader.uniform("uOffset", "float", this.offset.value);
 		this.shader.uniform("uMixing", "float", Config.pixelateMixing);
 		GL.draw(this.mesh);
