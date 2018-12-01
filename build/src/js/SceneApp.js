@@ -153,7 +153,7 @@ class SceneApp extends Scene {
 		this._angles.x *= 0.1;
 		this._angles.y *= 0.1;
 		
-		const animals = ['deer', 'whale', 'bear'];
+		const animals = ['deer', 'laputa', 'whale', 'bear'];
 		let index = animals.indexOf(Config.animal);
 		index++;
 		if(index >= animals.length) {

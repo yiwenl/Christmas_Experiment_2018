@@ -26,6 +26,7 @@ const checkBox = (box, a, r, margin=0) => {
 
 const margins = {
 	deer:0.8,
+	laputa:0.5,
 	whale:0.1,
 	bear:0.8,
 	bull:0.8
