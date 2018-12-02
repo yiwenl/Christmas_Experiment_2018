@@ -1,5 +1,6 @@
 // SoundManager.js
 import sono from 'libs/sono';
+import AudioAnim from './AudioAnim';
 
 class SoundManager {
 	constructor() {
@@ -8,17 +9,10 @@ class SoundManager {
 
 		this._btn = document.body.querySelector('.audio-toggle');
 		this._btn.addEventListener('click', ()=>this.toggle());
+
+		this._anim = new AudioAnim();
 	}
 
-
-	fadeOut() {
-
-	}
-
-
-	faseIn() {
-
-	}
 
 
 	toggle() {
@@ -35,19 +29,14 @@ class SoundManager {
 
 		if(this._isPlaying) {
 			this._sound.pause();
+			this._anim.close();
 		} else {
 			this._sound.play();
+			this._anim.open();
 		}
 
-		if(this._btn.classList.contains('isSoundOn')) {
-			this._btn.classList.remove('isSoundOn');
-		}
-		this._btn.class
 
 		this._isPlaying = !this._isPlaying;
-		if(this._isPlaying) {
-			this._btn.classList.add('isSoundOn');
-		}
 	}
 }
 

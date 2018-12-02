@@ -6,7 +6,7 @@ export default {
 	floorRadius:3.5,
 	maxFloorHeight:0.6,
 	treeBumpHeight:0.25,
-	numSlides:50,
+	numSlides:100,
 	noiseNum:8,
 	noiseScale:3,
 	animated:false,
