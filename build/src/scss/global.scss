@@ -54,26 +54,18 @@ h1,h2,h3,h4,text,p {
 	left: 0;
 }
 
-.audio-toggle {
-	$iconSize:18px;
-	width:$iconSize;
-	height:$iconSize;
 
+.audio-toggle {
+	cursor: pointer;
+	
+}
+
+
+.audio-anim {
 	position: fixed;
 	z-index: 9999;
 	bottom: 5%;
 	left: 5%;
-
-	background: none;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
-	background-color: rgba(255, 0, 0, .1);
-
-	opacity: .5;
-
 }
 
 .sound-on {

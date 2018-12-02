@@ -2,7 +2,7 @@
 
 import alfrid, { Scene, GL } from 'alfrid';
 import Assets from './Assets';
-// import Settings from './Settings';
+import Settings from './Settings';
 import Config from './Config';
 import Noise3D from './Noise3D';
 
@@ -35,10 +35,10 @@ class SceneApp extends Scene {
 		if(GL.isMobile) {
 			fboScale = 0.8;
 		}
-		// Settings.init();
+		Settings.init();
 
 		Config.showSnow = false;
-		// Settings.refresh();
+		Settings.refresh();
 
 		super();
 		this.resize();
@@ -105,7 +105,7 @@ class SceneApp extends Scene {
 			}
 		});
 
-		// addControls(this);
+		addControls(this);
 	}
 
 	open() {
@@ -317,9 +317,7 @@ class SceneApp extends Scene {
 		this._vTrees.render(this.camera.position);
 		this._vAnimal.render();
 		if(!GL.isMobile && mRenderFog) {
-			console.time('fog');
 			this._vFog.render(this._noises.texture0, this._noises.texture1, this._count / interval);	
-			console.timeEnd('fog');
 		}
 		
 	}
