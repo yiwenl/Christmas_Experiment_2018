@@ -21,6 +21,7 @@ class LoadingAnim extends alfrid.EventDispatcher {
 		this.context = this.canvas.getContext('2d');
 
 		this._hasAnimationCompleted = false;
+		this._hasCalledClose = false;
 		this.startAnimation();
 	}
 
@@ -127,14 +128,18 @@ class LoadingAnim extends alfrid.EventDispatcher {
 
 	close() {
 		if(!this._hasAnimationCompleted) {
+			this._hasCalledClose = true;
 			alfrid.Scheduler.next(()=>this.close());
 			return;
 		}
 
-		this.canvas.classList.add('close');
+		setTimeout(()=> {
+			this.canvas.classList.add('close');
+		}, this._hasCalledClose ? 500 : 1);
+		
 		setTimeout(()=> {
 			this.trigger('onAnimClosed');
-		}, 1000)
+		},  this._hasCalledClose ? 1500 : 1000)
 		
 	}
 
