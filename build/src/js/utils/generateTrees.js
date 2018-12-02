@@ -41,6 +41,9 @@ const generateTrees = () => {
 	let i = Config.numTrees;
 
 	const margin = margins[Config.animal] || 0.1;
+	let threshold = .4;
+	const angleRange = .75;
+	let angleOffset = random(-angleRange, angleRange);
 
 	while(i--) {
 		let rr = 0;
@@ -48,7 +51,12 @@ const generateTrees = () => {
 		let count = 0;
 		do {
 			rr = Math.sqrt(Math.random()) * r;
-			a = Math.random() * Math.PI * 2.0;
+			if(Math.random() > .2) {
+				a = random(threshold, Math.PI * 2.0 - threshold) + Math.PI/2 - angleOffset;	
+			} else {
+				a = Math.random() * Math.PI * 2.0;
+			}
+			
 		} while(checkBox(box, a, rr, margin) && count ++ < 100);
 
 		positions.push([Math.cos(a) * rr, 0, Math.sin(a) * rr]);	
