@@ -2,7 +2,7 @@
 
 import alfrid, { Scene, GL } from 'alfrid';
 import Assets from './Assets';
-// import Settings from './Settings';
+import Settings from './Settings';
 import Config from './Config';
 import Noise3D from './Noise3D';
 
@@ -13,6 +13,7 @@ import ViewTrees from './ViewTrees';
 import ViewBg from './ViewBg';
 import ViewGround from './ViewGround';
 import ViewFog from './ViewFog';
+import ViewFogs from './ViewFogs';
 import ViewFXAA from './ViewFXAA';
 import ViewAnimal from './ViewAnimal';
 import ViewSquares from './ViewSquares';
@@ -29,16 +30,17 @@ const interval = 25;
 
 var random = function(min, max) { return min + Math.random() * (max - min);	}
 
+
 class SceneApp extends Scene {
 	constructor() {
 
 		if(GL.isMobile) {
 			fboScale = 0.8;
 		}
-		// Settings.init();
+		Settings.init();
 
 		Config.showSnow = false;
-		// Settings.refresh();
+		Settings.refresh();
 
 		super();
 		this.resize();
@@ -76,7 +78,9 @@ class SceneApp extends Scene {
 
 		this._isInTransition = false;
 		this._hasOpened = false;
+		this._hasProfiledFog = false;
 		this._resizeTimeout = 0;
+		this._goodFogRenderCount = 0;
 		this._count = 0;
 
 		window.addEventListener('keydown', (e)=> {
@@ -105,7 +109,7 @@ class SceneApp extends Scene {
 			}
 		});
 
-		// addControls(this);
+		addControls(this);
 	}
 
 	open() {
@@ -137,7 +141,8 @@ class SceneApp extends Scene {
 		this._vAnimal   = new ViewAnimal();
 		this._vSnow     = new ViewSnow();
 		this._vGround   = new ViewGround();
-		this._vFog      = new ViewFog();
+		// this._vFog      = new ViewFog();
+		this._vFogs	    = new ViewFogs();
 		this._vFxaa     = new ViewFXAA();
 		this._vSquares  = new ViewSquares();
 		this._vCover    = new ViewCover();
@@ -252,6 +257,7 @@ class SceneApp extends Scene {
 
 
 	render() {
+		this._hasProfiledFog = false;
 		this._count ++;
 		if(this._count >= interval) {
 			this.updateFog();
@@ -316,12 +322,22 @@ class SceneApp extends Scene {
 		}
 		this._vTrees.render(this.camera.position);
 		this._vAnimal.render();
+
 		if(!GL.isMobile && mRenderFog) {
-			console.time('fog');
-			this._vFog.render(this._noises.texture0, this._noises.texture1, this._count / interval);	
-			console.timeEnd('fog');
+			let t0          = performance.now();
+			let tt0         = new Date().getTime();
+			this._vFogs.render(this._noises.texture0, this._noises.texture1, this._count / interval);	
+			let t1          = performance.now();
+			let tt1         = new Date().getTime();
+			let renderTime  = t1 - t0;
+			let renderTime0 = tt1 - tt0;
+			
+			if(Math.random() > 0.5) {
+				console.log('Fog render time :', renderTime, renderTime0);	
+			}
 		}
 		
+		this._hasProfiledFog = true;
 	}
 
 

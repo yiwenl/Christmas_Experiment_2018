@@ -13,10 +13,20 @@ class ViewFog extends alfrid.View {
 
 
 	_init() {
+		this.reset(Config.numSlides);
+	}
+
+
+	reset(mNumSlides) {
+		this._numSlides = mNumSlides;
+
+		console.log('Setting number of slides : ', mNumSlides);
+
 		let s = Config.floorRadius * 2;
 		this.mesh = alfrid.Geom.plane(s, s, 1);
 
-		const { numSlides } = Config;
+		// const { numSlides } = Config;
+		const numSlides = this._numSlides;
 		const posOffset = [];
 
 		for(let i=0; i<numSlides; i++) {
@@ -24,8 +34,10 @@ class ViewFog extends alfrid.View {
 			posOffset.push([0, s/2, z]);
 		}
 
-		this.offset = 0.4;
+		this.offset = 0.23;
 		this.mesh.bufferInstance(posOffset, 'aPosOffset');
+		console.log(posOffset.length);
+
 	}
 
 
@@ -34,7 +46,7 @@ class ViewFog extends alfrid.View {
 		this.shader.bind();
 		this.shader.uniform("uOffset", "float", this.offset);
 		this.shader.uniform("uNum", "float", Config.noiseNum);
-		this.shader.uniform("uNumSlices", "float", Config.numSlides);
+		this.shader.uniform("uNumSlices", "float", this._numSlides);
 		this.shader.uniform("texture0", "uniform1i", 0);
 		texture0.bind(0);
 		this.shader.uniform("texture1", "uniform1i", 1);
@@ -42,10 +54,6 @@ class ViewFog extends alfrid.View {
 		this.shader.uniform("uPercent", "float", percent);
 		this.shader.uniform("uSize", "float", Config.floorRadius);
 
-		// this.matrices.forEach( mtx => {
-		// 	this.shader.uniform("uLocalMatrix", "mat4", mtx);
-			
-		// });
 		GL.draw(this.mesh);	
 		GL.enableAlphaBlending();
 	}
