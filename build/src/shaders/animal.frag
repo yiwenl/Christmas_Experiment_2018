@@ -1,8 +1,6 @@
 precision highp float;
 varying vec3 vNormal;
 varying vec4 vScreenPosition;
-varying vec2 vTextureCoord;
-
 
 #define LIGHT vec3(0.0, 0.0, 1.0)
 

@@ -3,9 +3,9 @@
         {
             "bufferView" : 0,
             "componentType" : 5123,
-            "count" : 10071,
+            "count" : 8337,
             "max" : [
-                2486
+                1682
             ],
             "min" : [
                 0
@@ -15,32 +15,32 @@
         {
             "bufferView" : 1,
             "componentType" : 5126,
-            "count" : 2487,
+            "count" : 1683,
             "max" : [
-                0.6151880025863647,
-                0.2339009940624237,
-                0.00012892199447378516
+                1.4972599744796753,
+                2.1414198875427246,
+                -0.9730470180511475
             ],
             "min" : [
-                -1.2360399961471558,
-                -0.26256000995635986,
-                -2.497450113296509
+                -0.45041701197624207,
+                -2.7550199031829834,
+                -2.1678900718688965
             ],
             "type" : "VEC3"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
-            "count" : 2487,
+            "count" : 1683,
             "max" : [
-                0.999969482421875,
-                0.9998779296875,
+                0.999603271484375,
+                0.999542236328125,
                 0.999969482421875
             ],
             "min" : [
-                -0.999969482421875,
-                -0.9998779296875,
-                -0.99951171875
+                -0.9990233778953552,
+                -0.9851984977722168,
+                -0.999969482421875
             ],
             "type" : "VEC3"
         }
@@ -52,32 +52,32 @@
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 20142,
+            "byteLength" : 16674,
             "byteOffset" : 0,
             "target" : 34963
         },
         {
             "buffer" : 0,
-            "byteLength" : 29844,
-            "byteOffset" : 20144,
+            "byteLength" : 20196,
+            "byteOffset" : 16676,
             "target" : 34962
         },
         {
             "buffer" : 0,
-            "byteLength" : 29844,
-            "byteOffset" : 49988,
+            "byteLength" : 20196,
+            "byteOffset" : 36872,
             "target" : 34962
         }
     ],
     "buffers" : [
         {
-            "byteLength" : 79832,
-            "uri" : "deer1.bin"
+            "byteLength" : 57068,
+            "uri" : "whale1.bin"
         }
     ],
     "meshes" : [
         {
-            "name" : "deer",
+            "name" : "whale",
             "primitives" : [
                 {
                     "attributes" : {
@@ -92,7 +92,7 @@
     "nodes" : [
         {
             "mesh" : 0,
-            "name" : "deer",
+            "name" : "whale",
             "rotation" : [
                 0.7071068286895752,
                 0.0,

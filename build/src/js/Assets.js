@@ -2,6 +2,7 @@
 
 import assetsToLoad from './asset-list';
 import alfrid, { GLTexture, GLCubeTexture, Mesh, ObjLoader } from 'alfrid';
+import { parse } from './GLTFParser';
 
 const Assets = {};
 let _assets = [];

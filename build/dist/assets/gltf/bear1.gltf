@@ -3,9 +3,9 @@
         {
             "bufferView" : 0,
             "componentType" : 5123,
-            "count" : 10071,
+            "count" : 8112,
             "max" : [
-                2486
+                2414
             ],
             "min" : [
                 0
@@ -15,32 +15,32 @@
         {
             "bufferView" : 1,
             "componentType" : 5126,
-            "count" : 2487,
+            "count" : 2415,
             "max" : [
-                0.6151880025863647,
-                0.2339009940624237,
-                0.00012892199447378516
+                0.5180580019950867,
+                1.2411140203475952,
+                1.9999999949504854e-06
             ],
             "min" : [
-                -1.2360399961471558,
-                -0.26256000995635986,
-                -2.497450113296509
+                -0.5180580019950867,
+                -1.2411129474639893,
+                -1.4708640575408936
             ],
             "type" : "VEC3"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
-            "count" : 2487,
+            "count" : 2415,
             "max" : [
-                0.999969482421875,
-                0.9998779296875,
-                0.999969482421875
+                0.99981689453125,
+                0.999603271484375,
+                1.0
             ],
             "min" : [
-                -0.999969482421875,
-                -0.9998779296875,
-                -0.99951171875
+                -0.999359130859375,
+                -0.9987792372703552,
+                -0.9996337890625
             ],
             "type" : "VEC3"
         }
@@ -52,32 +52,32 @@
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 20142,
+            "byteLength" : 16224,
             "byteOffset" : 0,
             "target" : 34963
         },
         {
             "buffer" : 0,
-            "byteLength" : 29844,
-            "byteOffset" : 20144,
+            "byteLength" : 28980,
+            "byteOffset" : 16224,
             "target" : 34962
         },
         {
             "buffer" : 0,
-            "byteLength" : 29844,
-            "byteOffset" : 49988,
+            "byteLength" : 28980,
+            "byteOffset" : 45204,
             "target" : 34962
         }
     ],
     "buffers" : [
         {
-            "byteLength" : 79832,
-            "uri" : "deer1.bin"
+            "byteLength" : 74184,
+            "uri" : "bear1.bin"
         }
     ],
     "meshes" : [
         {
-            "name" : "deer",
+            "name" : "polar_bear_standing_Polar_Bear_Standing_v1",
             "primitives" : [
                 {
                     "attributes" : {
@@ -92,7 +92,7 @@
     "nodes" : [
         {
             "mesh" : 0,
-            "name" : "deer",
+            "name" : "polar_bear_standing_Polar_Bear_Standing_v1",
             "rotation" : [
                 0.7071068286895752,
                 0.0,
