@@ -50,6 +50,9 @@ export default (scene) => {
 		// setTimeout(()=> {
 		// 	simulateKey(72);
 		// }, 500);
+
+		scene.open();
+		document.body.classList.add('isOpened');
 		
 	}, 500);
 }

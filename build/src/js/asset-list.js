@@ -2,6 +2,8 @@
 const assetsToLoad = [
 	{"id":"gradientMap","url":"assets/img/gradientMap.png","type":"png"},
 	{"id":"noise","url":"assets/img/noise.jpg","type":"jpg"},
+	{"id":"deer1_bin","url":"assets/gltf/deer1.bin","type":"binary"},
+	{"id":"deer1","url":"assets/gltf/deer1.gltf","type":"text"},
 	{"id":"bear","url":"assets/obj/bear.obj","type":"text"},
 	{"id":"deer","url":"assets/obj/deer.obj","type":"text"},
 	{"id":"laputa","url":"assets/obj/laputa.obj","type":"text"},

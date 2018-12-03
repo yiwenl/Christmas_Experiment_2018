@@ -56,7 +56,19 @@ Assets.init = function() {
 					file:texture
 				};
 				break;
-
+			case 'bin' :
+				return {
+					id:o.id,
+					file
+				}
+				break;
+			case 'gltf':
+			case 'json':
+			return {
+					id:o.id,
+					file:JSON.parse(file)
+				}
+				break;
 			case 'obj':
 				const mesh = ObjLoader.parse(file);
 				return {

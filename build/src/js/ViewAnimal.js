@@ -15,6 +15,13 @@ class ViewAnimal extends alfrid.View {
 
 	_init() {
 		this.mesh = Assets.get(Config.animal);
+
+		const id = 'deer1';
+		let gltf = Assets.get(id);
+		let bin = Assets.get(`${id}_bin`);
+
+		console.log(gltf);
+		// console.log(bin);
 	}
 
 

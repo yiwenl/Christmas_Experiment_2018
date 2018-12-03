@@ -8,6 +8,7 @@
     "build:dev": "npm run html & webpack --progress --profile --colors",
     "build": "NODE_ENV=production npm run html & NODE_ENV=production webpack --progress --profile --colors",
     "watch": "webpack --watch",
+    "assets": "node ./tasks/watch-asset.js",
     "html": "node ./tasks/html.js",
     "html:watch": "node ./tasks/html-watch.js",
     "lint": "eslint -c .eslintrc src/**",

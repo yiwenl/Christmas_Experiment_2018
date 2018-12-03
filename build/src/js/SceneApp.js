@@ -314,7 +314,7 @@ class SceneApp extends Scene {
 		if(Config.showSnow) {
 			this._vSnow.render();	
 		}
-		this._vTrees.render(this.camera.position);
+		// this._vTrees.render(this.camera.position);
 		this._vAnimal.render();
 		if(!GL.isMobile && mRenderFog) {
 			this._vFog.render(this._noises.texture0, this._noises.texture1, this._count / interval);	
