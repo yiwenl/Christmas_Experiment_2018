@@ -3,8 +3,8 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  position: static;
+  overflow: auto;
+  position: fixed;
   background: black; }
 
 html {
@@ -19,6 +19,26 @@ h1, h2, h3, h4, text, p {
   user-select: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 2000px;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.5); }
+
+.brim {
+  background-color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%; }
+  .brim p {
+    color: black;
+    font-size: 50px; }
 
 .loading-anim {
   width: 100px;
@@ -40,22 +60,14 @@ h1, h2, h3, h4, text, p {
   top: 0;
   left: 0; }
 
+.audio-toggle {
+  cursor: pointer; }
+
 .audio-anim {
   position: fixed;
   z-index: 9999;
   bottom: 5%;
   left: 5%; }
-
-.sound-on {
-  background-image: url("../../assets/css-img/soundOn.png"); }
-  .isSoundOn .sound-on {
-    opacity: 0; }
-
-.sound-off {
-  background-image: url("../../assets/css-img/soundOff.png");
-  opacity: 0; }
-  .isSoundOn .sound-off {
-    opacity: 1; }
 
 .sound-icon {
   position: absolute;
@@ -170,16 +182,25 @@ div:fullscreen {
     letter-spacing: 10px;
     opacity: 1; }
 
-.Loading-Bar {
+.Loading-container {
   position: absolute;
   z-index: 998;
-  width: 0%;
-  height: 1px;
+  width: 80px;
+  height: 2px;
+  margin-left: -40px;
   top: 55%;
-  background: rgba(255, 255, 255, 0.5);
+  left: 50%;
   opacity: 0;
-  transition: width .5s ease-out, opacity .5s ease-out; }
-  .isLoading .Loading-Bar {
+  transition: opacity .5s ease-out;
+  background-color: rgba(255, 255, 255, 0.5); }
+  .isLoading .Loading-container {
+    transition: opacity .5s ease-out 1s;
     opacity: 1; }
+
+.Loading-Bar {
+  width: 0%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: width .5s ease-out; }
 
 /*# sourceMappingURL=main.css.map*/

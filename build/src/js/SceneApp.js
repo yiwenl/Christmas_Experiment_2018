@@ -17,9 +17,10 @@ import ViewFXAA from './ViewFXAA';
 import ViewAnimal from './ViewAnimal';
 import ViewSquares from './ViewSquares';
 import ViewCover from './ViewCover';
-import ViewSnow from './ViewSnow';
+// import ViewSnow from './ViewSnow';
 import PassBloom from './PassBloom';
-import SoundManager from './SoundManager';
+import SoundManager from './helpers/SoundManager';
+import FullscreenManager from './helpers/FullscreenManager';
 
 import addControls from './debug/addControls';
 import { TweenLite } from "gsap/TweenMax";
@@ -33,7 +34,8 @@ class SceneApp extends Scene {
 	constructor() {
 
 		if(GL.isMobile) {
-			fboScale = 0.8;
+			fboScale = 0.9;
+			Config.numSlides = 50;
 		}
 		Settings.init();
 
@@ -103,6 +105,8 @@ class SceneApp extends Scene {
 					this._haslocked = false;
 				}, 15000);
 			}
+
+			window.scrollTo(0, 0);
 		});
 
 		addControls(this);
@@ -110,6 +114,7 @@ class SceneApp extends Scene {
 
 	open() {
 		this._vOpeningCover.close();
+		this.orbitalControl.rx.value = -0.15;
 	}
 
 	_initTextures() {
@@ -135,7 +140,7 @@ class SceneApp extends Scene {
 		this._vTrees    = new ViewTrees();
 		this._vBg       = new ViewBg();
 		this._vAnimal   = new ViewAnimal();
-		this._vSnow     = new ViewSnow();
+		// this._vSnow     = new ViewSnow();
 		this._vGround   = new ViewGround();
 		this._vFog      = new ViewFog();
 		this._vFxaa     = new ViewFXAA();
@@ -210,13 +215,19 @@ class SceneApp extends Scene {
 			this._vSquares.close();
 			this._vCover.close();
 			this._hasOpened = true;
+
 		}, 3000);
+
+		setTimeout(()=> {
+			this.orbitalControl.rx.value = -0.15;
+		}, 5500);
 
 
 		setTimeout(() => {
 			this._isInTransition = false;
 			this._angles.x = this._angles.y = 0;
 			this.orbitalControl.lock(false);
+			
 		}, 6000);
 
 		//	when camera in position ( planes not visible )
@@ -311,12 +322,9 @@ class SceneApp extends Scene {
 		this._vBg.render();
 		this._vGround.render();
 		this._vFloor.render(this._textureFloor);
-		if(Config.showSnow) {
-			this._vSnow.render();	
-		}
 		this._vTrees.render(this.camera.position);
 		this._vAnimal.render();
-		if(!GL.isMobile && mRenderFog) {
+		if(mRenderFog) {
 			this._vFog.render(this._noises.texture0, this._noises.texture1, this._count / interval);	
 		}
 		

@@ -33,8 +33,8 @@ export default (scene) => {
 		gui.add(Config, 'bloomStrength', 0, 1).onChange(Settings.refresh);
 		gui.add(Config, 'fogMovingSpeed', 0, 1).onChange(Settings.refresh);
 		gui.add(Config, 'pixelateMixing', 0, 1).onChange(Settings.refresh);
-		gui.add(Config, 'snowSpeed', 0, 1).onChange(Settings.refresh);
-		gui.add(Config, 'showSnow').name('Show Snow').onChange(Settings.refresh);
+		// gui.add(Config, 'snowSpeed', 0, 1).onChange(Settings.refresh);
+		// gui.add(Config, 'showSnow').name('Show Snow').onChange(Settings.refresh);
 		gui.add(Config, 'gradientMap', 0, 1).name('Gradient Map').onChange(Settings.refresh);
 		gui.add(Config, 'fxaa').name('Post Effect').onChange(Settings.refresh);
 		gui.add(scene, 'resetCamera');
@@ -47,12 +47,12 @@ export default (scene) => {
 		}
 
 		gui.add(o, 'saveSettings').name('Save Settings');
-		// setTimeout(()=> {
-		// 	simulateKey(72);
-		// }, 500);
+		setTimeout(()=> {
+			simulateKey(72);
+		}, 500);
 
-		scene.open();
-		document.body.classList.add('isOpened');
+		// scene.open();
+		// document.body.classList.add('isOpened');
 		
 	}, 500);
 }

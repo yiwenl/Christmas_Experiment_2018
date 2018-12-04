@@ -4,7 +4,7 @@ import alfrid, { GL } from 'alfrid';
 import Config from './Config';
 import Assets from './Assets';
 
-import { parse } from './GLTFParser';
+import { parse } from './helpers/GLTFParser';
 
 import vs from 'shaders/animal.vert';
 import fs from 'shaders/animal.frag';
@@ -34,7 +34,6 @@ class ViewAnimal extends alfrid.View {
 
 		parse(gltf, bin)
 		.then( o => {
-			console.log('Done :', o);
 			this.mesh = o.output.meshes[0];
 
 			getAnimal(o);

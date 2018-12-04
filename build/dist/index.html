@@ -10,19 +10,43 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
 </head>
 <body>
-	<div class="Loading-Bar"></div>
+	<div class='Loading-container'>
+		<div class="Loading-Bar"></div>	
+	</div>
+	
 	<div class="container">
+		<div classs='overlay'></div>
 	</div>
 
 	<canvas width='200' height='200' class='loading-anim'></canvas>
-	<button class='audio-toggle'>
-		<canvas width='25' height='25' class='audio-anim'></canvas>	
-	</button>
+	
+	
 	
 
 	<div class='container-ui'>
-		<button class='fullscreen'><p>Go Fullscreen</p></button>
 		<p class='desc'>Press spacebar to discover more</p>
+
+		<button class='audio-toggle'>
+			<canvas width='25' height='25' class='audio-anim'></canvas>	
+		</button>
+		<div class='fullscreen-anim'>
+			<div class='top left square'>
+				<div class='bar vertical'></div>
+				<div class='bar horizontal'></div>
+			</div>
+			<div class='top right square'>
+				<div class='bar vertical'></div>
+				<div class='bar horizontal'></div>
+			</div>
+			<div class='bottom left square'>
+				<div class='bar vertical'></div>
+				<div class='bar horizontal'></div>
+			</div>
+			<div class='bottom right square'>
+				<div class='bar vertical'></div>
+				<div class='bar horizontal'></div>
+			</div>
+		</div>
 	</div>
 	
 	<script type="text/javascript" src=assets/js/app.js></script>

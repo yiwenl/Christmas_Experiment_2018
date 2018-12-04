@@ -3,13 +3,14 @@ import debugPolyfill from './debug/debugPolyfill';
 import alfrid, { GL } from 'alfrid';
 import SceneApp from './SceneApp';
 import AssetsLoader from 'assets-loader';
-import LoadingAnim from './LoadingAnim';
+import LoadingAnim from './animations/LoadingAnim';
 
 import assets from './asset-list';
 import Assets from './Assets';
 import Config from './Config';
+// import Brim from './utils/Brim';
 
-let loadingAnim;
+let loadingAnim, loadingBar;
 
 if(document.body) {
 	_init();
@@ -21,6 +22,7 @@ if(document.body) {
 function _init() {
 
 	loadingAnim = new LoadingAnim();
+	loadingBar = document.querySelector('.Loading-container');
 
 
 	//	LOADING ASSETS
@@ -36,7 +38,7 @@ function _init() {
 		.on('progress', (p) => {
 			// console.log('Progress : ', p);
 			const loader = document.body.querySelector('.Loading-Bar');
-			if(loader) loader.style.width = `${(p * 100)}%`;
+			if(loader) loader.style.width = `${Math.floor(p * 100)}%`;
 		})
 		.on('complete', _onImageLoaded)
 		.start();
@@ -49,17 +51,14 @@ function _init() {
 
 function _onImageLoaded(o) {
 	//	ASSETS
-	console.log('Image Loaded : ', o);
 	window.assets = o;
 	const loader = document.body.querySelector('.Loading-Bar');
-	console.log('Loader :', loader);
 	loader.style.width = '100%';
 
 	_init3D();
 
-	setTimeout(()=> {
-		document.body.classList.remove('isLoading');
-	}, 250);
+
+	loadingBar.classList.add('loaded');
 }
 
 
@@ -72,21 +71,19 @@ function _init3D() {
 
 	//	INIT 3D TOOL
 	GL.init(canvas, {ignoreWebgl2:true});
-	console.log('isMobiel :', GL.isMobile);
+	
+
+	const ua = navigator.userAgent;
+	if(/Chrome/i.test(ua)) {
+		setTimeout(()=> {
+			document.body.classList.add('isChrome');
+		}, 1000);	
+	}
+
 	if(GL.isMobile) {
-
-		var ua = navigator.userAgent;
-		if(/Chrome/i.test(ua)) {
-			setTimeout(()=> {
-				document.body.classList.add('isMobileChrome');
-			}, 1000);	
-		}
-
-
 		setTimeout(()=> {
 			document.body.classList.add('isMobile');
 		}, 1000);	
-		
 	}
 
 
@@ -96,31 +93,20 @@ function _init3D() {
 	//	CREATE SCENE
 	const scene = new SceneApp();
 
-	//	Fullscreen
-	const btnFS = document.body.querySelector('.fullscreen');
-	const btnFSText = btnFS.querySelector('p');
-	let isInFullScreen = false;
-
-	btnFS.addEventListener('touchend', (e)=> {
-		console.log('fullscreen');
-		isInFullScreen = !isInFullScreen;
-
-		if(isInFullScreen) {
-			document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-			btnFSText.innerHTML = 'Exit Fullscreen';
-		} else {
-			document.webkitExitFullscreen();
-			btnFSText.innerHTML = 'Go Fullscreen';
-		}
-	});
-
 
 	loadingAnim.on('onAnimClosed', () => {
 		scene.open();
+		document.body.classList.remove('isLoading');
+		loadingBar.classList.add('close');
 
 		setTimeout(()=> {
+
 			document.body.classList.add('isOpened');
 		}, 1000);
 	});
 	loadingAnim.close();
+
+	setTimeout(()=> {
+		window.scrollTo(0, 1);
+	}, 1000)
 }

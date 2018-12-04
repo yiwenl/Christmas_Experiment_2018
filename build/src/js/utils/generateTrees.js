@@ -1,8 +1,7 @@
 // generateTrees.js
 
 import Config from '../Config';
-import Assets from '../Assets';
-import { getBoundingBox } from './';
+// import { getBoundingBox } from './';
 
 var random = function(min, max) { return min + Math.random() * (max - min);	}
 
@@ -32,10 +31,19 @@ const margins = {
 	bull:0.8
 }
 
+const boxes = {
+	deer:{left: -1.23604, right: 0.615188, front: 0.233901, back: -0.26256},
+	laputa:{left: -1.12674, right: 1.12674, front: 0.42027, back: -0.318306},
+	whale:{left: -0.450417, right: 1.49726, front: 2.14142, back: -2.75502},
+	bear:{left: -0.518058, right: 0.518058, front: 1.241114, back: -1.241113}
+}
+
 
 const generateTrees = () => {
-	const mesh = Assets.get(Config.animal);
-	const box = getBoundingBox(mesh, Config.animal);
+	// const mesh = Assets.get(Config.animal);
+	// const box = getBoundingBox(mesh, Config.animal);
+	const box = boxes[Config.animal];
+	// console.log('box', box);
 	const positions = [];
 	const r = Config.floorRadius * 1.05;
 	let i = Config.numTrees;

@@ -2,7 +2,6 @@
 
 import assetsToLoad from './asset-list';
 import alfrid, { GLTexture, GLCubeTexture, Mesh, ObjLoader } from 'alfrid';
-import { parse } from './GLTFParser';
 
 const Assets = {};
 let _assets = [];
@@ -29,7 +28,8 @@ Assets.init = function() {
 				texture = new GLTexture(file);
 				return {
 					id:o.id,
-					file:texture
+					file:texture,
+					type:ext
 				};
 				break;
 
@@ -39,7 +39,8 @@ Assets.init = function() {
 
 				const oAsset = {
 					id:o.id,
-					file:texture
+					file:texture,
+					type:ext
 				};
 
 				if(!hdrCubemaps[cubemapName]) {
@@ -54,27 +55,37 @@ Assets.init = function() {
 				texture = GLCubeTexture.parseDDS(file);
 				return {
 					id:o.id,
-					file:texture
+					file:texture,
+					type:ext
 				};
 				break;
 			case 'bin' :
 				return {
 					id:o.id,
-					file
+					file,
+					type:ext
 				}
 				break;
 			case 'gltf':
+			return {
+					id:o.id,
+					file:JSON.parse(file),
+					type:ext
+				}
+				break;
 			case 'json':
 			return {
 					id:o.id,
-					file:JSON.parse(file)
+					file:JSON.parse(file),
+					type:ext
 				}
 				break;
 			case 'obj':
 				const mesh = ObjLoader.parse(file);
 				return {
 					id:o.id,
-					file:mesh
+					file:mesh,
+					type:ext
 				}
 				break;
 		}

@@ -4,7 +4,7 @@ import alfrid, { GL } from 'alfrid';
 import Assets from './Assets';
 import Config from './Config';
 
-import { parse } from './GLTFParser';
+import { parse } from './helpers/GLTFParser';
 
 import vs from 'shaders/trees.vert';
 import fs from 'shaders/depth.frag';
