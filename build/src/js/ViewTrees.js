@@ -3,6 +3,9 @@
 import alfrid, { GL } from 'alfrid';
 import Assets from './Assets';
 import Config from './Config';
+
+import { parse } from './helpers/GLTFParser';
+
 import vs from 'shaders/trees.vert';
 import fs from 'shaders/depth.frag';
 
@@ -14,14 +17,40 @@ class ViewTrees extends alfrid.View {
 
 
 	_init() {
-		// this.mesh = Assets.get('pillar');
-		this.mesh1 = Assets.get('tree1');
-		this.mesh2 = Assets.get('tree2');
+		this.mtx = mat4.create();
+		this.mesh = [];
 
-		this.mesh = [this.mesh1, this.mesh2];
+		const getMesh = (gltf) => {
+			const nodes = gltf.nodes.filter( node => node.name !== 'Camera' && node.name !== 'Lamp');
+			const rotation = quat.clone(nodes[0].rotation);
+			mat4.fromQuat(this.mtx, rotation);
+		}
+
+
+		const addMesh = (id) => {
+			let gltf = Assets.get(`${id}`);
+			let bin = Assets.get(`${id}_bin`);
+
+			parse(gltf, bin)
+			.then( o => {
+				this.mesh.push(o.output.meshes[0]);
+
+				getMesh(o);
+			}, err => {
+				console.log('Error :', err);
+			});			
+		}
+
+
+		addMesh('tree01');
+		addMesh('tree02');
 	}
 
 	reset(trees) {
+		if(this.mesh.length < 2) {
+			alfrid.Scheduler.next(()=>this.reset(trees));
+			return;
+		}
 
 		let i = trees.length;
 		let half = i/2;
@@ -39,13 +68,17 @@ class ViewTrees extends alfrid.View {
 		}
 
 
-		this.mesh1.bufferInstance(data1, 'aPosOffset');
-		this.mesh2.bufferInstance(data2, 'aPosOffset');
+		this.mesh[0].bufferInstance(data1, 'aPosOffset');
+		this.mesh[1].bufferInstance(data2, 'aPosOffset');
 	}
 
 
 	render(mCamPos) {
+		if(this.mesh.length < 2) {
+			return;
+		}
 		this.shader.bind();
+		this.shader.uniform("uLocalMatrix", "mat4", this.mtx);
 		this.shader.uniform("uTreeScale", "float", Config.treeScale);
 		this.shader.uniform("uCamPos", "vec3", mCamPos);
 		GL.draw(this.mesh);

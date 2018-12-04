@@ -1,0 +1,113 @@
+{
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5123,
+            "count" : 8112,
+            "max" : [
+                2414
+            ],
+            "min" : [
+                0
+            ],
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 2415,
+            "max" : [
+                0.5180580019950867,
+                1.2411140203475952,
+                1.9999999949504854e-06
+            ],
+            "min" : [
+                -0.5180580019950867,
+                -1.2411129474639893,
+                -1.4708640575408936
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 2415,
+            "max" : [
+                0.99981689453125,
+                0.999603271484375,
+                1.0
+            ],
+            "min" : [
+                -0.999359130859375,
+                -0.9987792372703552,
+                -0.9996337890625
+            ],
+            "type" : "VEC3"
+        }
+    ],
+    "asset" : {
+        "generator" : "Khronos Blender glTF 2.0 exporter",
+        "version" : "2.0"
+    },
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 16224,
+            "byteOffset" : 0,
+            "target" : 34963
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 28980,
+            "byteOffset" : 16224,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 28980,
+            "byteOffset" : 45204,
+            "target" : 34962
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 74184,
+            "uri" : "bear1.bin"
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "polar_bear_standing_Polar_Bear_Standing_v1",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "NORMAL" : 2,
+                        "POSITION" : 1
+                    },
+                    "indices" : 0
+                }
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "polar_bear_standing_Polar_Bear_Standing_v1",
+            "rotation" : [
+                0.7071068286895752,
+                0.0,
+                -0.0,
+                0.7071067094802856
+            ]
+        }
+    ],
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ]
+}

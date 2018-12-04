@@ -2,18 +2,15 @@
 
 precision highp float;
 attribute vec3 aVertexPosition;
-attribute vec2 aTextureCoord;
-attribute vec3 aNormal;
 attribute vec4 aPosOffset;
 
+uniform mat4 uLocalMatrix;
 uniform mat4 uModelMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uProjectionMatrix;
 uniform float uTreeScale;
 uniform vec3 uCamPos;
 
-varying vec2 vTextureCoord;
-varying vec3 vNormal;
 varying vec4 vScreenPosition;
 
 vec2 rotate(vec2 v, float a) {
@@ -29,7 +26,7 @@ void main(void) {
 	t = mix(1.0, t, .5);
 
 	
-	vec3 pos        = aVertexPosition;
+	vec3 pos        = (uLocalMatrix * vec4(aVertexPosition, 1.0)).xyz;
 	float scale     = mix(aPosOffset.z, 1.0, .3);
 	pos.xz          = rotate(pos.xz, aPosOffset.w);
 	pos.xz 			*= t;
@@ -39,11 +36,7 @@ void main(void) {
 
 	pos.xz          += aPosOffset.xy;
 
-
-
 	
 	vScreenPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(pos, 1.0);
 	gl_Position     = vScreenPosition;
-	vTextureCoord   = aTextureCoord;
-	vNormal         = aNormal;
 }

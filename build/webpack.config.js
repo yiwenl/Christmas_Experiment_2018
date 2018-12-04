@@ -88,6 +88,7 @@ const config = {
 	},
 	resolve: {
 		alias: {
+			'alfrid':path.resolve(__dirname, 'src/js/libs/alfrid'),
 			'libs':path.resolve(__dirname, 'src/js/libs'),
 			'shaders':path.resolve(__dirname, 'src/shaders')
 		}
