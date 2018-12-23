@@ -2,7 +2,7 @@
 
 import alfrid, { Scene, GL } from 'alfrid';
 import Assets from './Assets';
-import Settings from './Settings';
+// import Settings from './Settings';
 import Config from './Config';
 import Noise3D from './Noise3D';
 
@@ -22,7 +22,7 @@ import PassBloom from './PassBloom';
 import SoundManager from './helpers/SoundManager';
 import FullscreenManager from './helpers/FullscreenManager';
 
-import addControls from './debug/addControls';
+// import addControls from './debug/addControls';
 import { TweenLite } from "gsap/TweenMax";
 
 let fboScale = 1;
@@ -37,10 +37,10 @@ class SceneApp extends Scene {
 			fboScale = 0.9;
 			Config.numSlides = 50;
 		}
-		Settings.init();
+		// Settings.init();
 
 		Config.showSnow = false;
-		Settings.refresh();
+		// Settings.refresh();
 
 		super();
 		this.resize();
@@ -109,7 +109,7 @@ class SceneApp extends Scene {
 			window.scrollTo(0, 0);
 		});
 
-		addControls(this);
+		// addControls(this);
 	}
 
 	open() {
